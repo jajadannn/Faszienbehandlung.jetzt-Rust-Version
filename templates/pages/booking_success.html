@@ -1,0 +1,40 @@
+{% extends "layouts/base.html" %}
+
+{% block content %}
+<section class="page-hero">
+  <div class="container narrow">
+    <p class="eyebrow">Terminwunsch eingegangen</p>
+    <h1>Vielen Dank, {{ customer_name }}.</h1>
+    <p class="lead">Ihr gewuenschter Termin am {{ desired_at_label }} wurde gespeichert.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container narrow">
+    <article class="content-card">
+      {% if created_account %}
+        <h2>Ihr Kundenkonto wurde angelegt</h2>
+        <p>Die Anfrage ist dem neuen Konto unter <strong>{{ customer_email }}</strong> zugeordnet.</p>
+      {% else %}
+        <h2>Ihre Anfrage wurde in Ihrem Kundenkonto hinterlegt</h2>
+        <p>Sie sehen den Eintrag nach dem Login im geschuetzten Bereich wieder.</p>
+      {% endif %}
+
+      {% if needs_verification %}
+        <p>Bitte bestaetigen Sie jetzt zunaechst Ihre E-Mail-Adresse. Erst danach wird die Terminanfrage verbindlich weiterbearbeitet.</p>
+      {% else %}
+        <p>Die Praxis kann Ihre Anfrage nun intern pruefen und den Status im System aktualisieren.</p>
+      {% endif %}
+
+      <div class="hero-actions">
+        {% if created_account %}
+          <a class="button button-primary" href="/anmeldung">Zum Login</a>
+        {% else %}
+          <a class="button button-primary" href="/konto">Zum Kundenkonto</a>
+        {% endif %}
+        <a class="button button-secondary" href="/">Zur Startseite</a>
+      </div>
+    </article>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends "layouts/base.html" %}
+
+{% block content %}
+<section class="page-hero">
+  <div class="container narrow">
+    <p class="eyebrow">E-Mail-Verifizierung</p>
+    <h1>{% if success %}E-Mail-Adresse erfolgreich bestaetigt.{% else %}Verifizierungslink ungueltig oder abgelaufen.{% endif %}</h1>
+    <p class="lead">{% if success %}Ihr Kundenkonto kann jetzt fuer Buchung und Login voll genutzt werden.{% else %}Bitte fordern Sie bei Bedarf einen neuen Bestatigungslink an oder registrieren Sie sich erneut.{% endif %}</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container narrow">
+    <div class="hero-actions">
+      <a class="button button-primary" href="/anmeldung">Zur Anmeldung</a>
+      <a class="button button-secondary" href="/terminbuchung">Zur Terminbuchung</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

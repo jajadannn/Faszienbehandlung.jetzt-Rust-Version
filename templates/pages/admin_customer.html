@@ -1,0 +1,190 @@
+{% extends "layouts/base.html" %}
+
+{% block content %}
+<section class="page-hero">
+  <div class="container narrow">
+    <p class="eyebrow">Kundenprofil</p>
+    <h1>{{ profile.full_name }}</h1>
+    <p class="lead">Verwaltung durch {{ admin_name }}. Hier sind Stammdaten, Buchungshistorie, Zahlungsstatus und interne Notizen direkt zugreifbar.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container dashboard-grid">
+    <article class="content-card">
+      <h2>Stammdaten</h2>
+      <p>{{ profile.email }}<br>{{ profile.phone_number }}<br>{{ profile.city }}</p>
+      <p>E-Mail bestaetigt: <strong>{{ profile.email_verified_label }}</strong><br>Status: <strong>{{ profile.status_label }}</strong></p>
+    </article>
+    <article class="content-card card--sky">
+      <h2>Buchungen</h2>
+      <p>Gesamt: <strong>{{ profile.appointment_count }}</strong></p>
+      <p>Letzte Buchung: {{ profile.last_appointment_label }}</p>
+      <p>Naechster Termin: {{ profile.next_appointment_label }}</p>
+    </article>
+    <article class="content-card card--plum">
+      <h2>Zahlungen</h2>
+      <p>Gesamtsumme: <strong>{{ profile.total_value_label }}</strong></p>
+      <p>Bezahlt: {{ profile.total_paid_label }}</p>
+      <p>Offen: {{ profile.total_open_label }}</p>
+    </article>
+  </div>
+</section>
+
+{% if let Some(flash) = flash %}
+  <section class="section section-tight">
+    <div class="container narrow">
+      <div class="flash flash-{{ flash.kind }}">
+        <strong>{{ flash.title }}</strong>
+        <p>{{ flash.text }}</p>
+      </div>
+    </div>
+  </section>
+{% endif %}
+
+<section class="section section-soft">
+  <div class="container card-grid card-grid-two">
+    <article class="content-card">
+      <h2>Termin manuell hinzufuegen</h2>
+      <form method="post" action="/admin/kunden/{{ profile.customer_id }}/termine" class="stack-form">
+        <input type="hidden" name="csrf_token" value="{{ shell.csrf_token }}">
+        <label>Datum und Uhrzeit<input type="datetime-local" name="desired_at" required></label>
+        <label>Status
+          <select name="status">
+            <option value="angefragt">Angefragt</option>
+            <option value="bestaetigt">Bestaetigt</option>
+            <option value="abgeschlossen">Abgeschlossen</option>
+            <option value="storniert">Storniert</option>
+          </select>
+        </label>
+        <label>Gesamtbetrag in EUR<input type="text" name="total_amount_eur" placeholder="89,00" required></label>
+        <label>Interne Nachricht<textarea name="message" rows="4"></textarea></label>
+        <button class="button button-primary" type="submit">Termin anlegen</button>
+      </form>
+    </article>
+    <article class="content-card">
+      <h2>Zahlung erfassen</h2>
+      <form method="post" action="/admin/kunden/{{ profile.customer_id }}/zahlungen" class="stack-form">
+        <input type="hidden" name="csrf_token" value="{{ shell.csrf_token }}">
+        <label>Terminzuordnung
+          <select name="appointment_id">
+            <option value="">Ohne Termin</option>
+            {% for appointment in appointments %}
+              <option value="{{ appointment.id }}">#{{ appointment.id }} | {{ appointment.desired_at_label }}</option>
+            {% endfor %}
+          </select>
+        </label>
+        <label>Gesamtbetrag in EUR<input type="text" name="amount_total_eur" placeholder="89,00" required></label>
+        <label>Eingegangene Zahlung in EUR<input type="text" name="amount_paid_eur" placeholder="45,00" required></label>
+        <label>Zahlungsdatum<input type="date" name="payment_date"></label>
+        <label>Notiz<textarea name="note" rows="4"></textarea></label>
+        <button class="button button-primary" type="submit">Zahlung speichern</button>
+      </form>
+    </article>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-intro">
+      <p class="eyebrow">Termine</p>
+      <h2>Vergangene und geplante Termine</h2>
+    </div>
+    <div class="card-grid card-grid-two">
+      {% if appointments.is_empty() %}
+        <article class="content-card">
+          <h3>Noch keine Termine vorhanden</h3>
+        </article>
+      {% else %}
+        {% for appointment in appointments %}
+          <article class="content-card">
+            <h3>#{{ appointment.id }} | {{ appointment.desired_at_label }}</h3>
+            <p>Status: <strong>{{ appointment.status_label }}</strong></p>
+            <p>{{ appointment.message }}</p>
+            <p>Gesamt: {{ appointment.total_amount_label }}<br>Bezahlt: {{ appointment.paid_amount_label }}<br>Offen: {{ appointment.open_amount_label }}</p>
+            <form method="post" action="/admin/kunden/{{ profile.customer_id }}/termine/{{ appointment.id }}/status" class="inline-form">
+              <input type="hidden" name="csrf_token" value="{{ shell.csrf_token }}">
+              <select name="status">
+                <option value="angefragt">Angefragt</option>
+                <option value="bestaetigt">Bestaetigt</option>
+                <option value="abgeschlossen">Abgeschlossen</option>
+                <option value="storniert">Storniert</option>
+              </select>
+              <button class="button button-secondary button-small" type="submit">Status speichern</button>
+            </form>
+          </article>
+        {% endfor %}
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<section class="section section-soft">
+  <div class="container card-grid card-grid-two">
+    <article class="content-card">
+      <h2>Zahlungspositionen</h2>
+      <div class="table-card table-card-inline">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Gesamt</th>
+              <th>Bezahlt</th>
+              <th>Offen</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for payment in payments %}
+              <tr>
+                <td>#{{ payment.id }}</td>
+                <td>{{ payment.amount_total_label }}</td>
+                <td>{{ payment.amount_paid_label }}</td>
+                <td>{{ payment.amount_open_label }}</td>
+                <td>{{ payment.status_label }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </article>
+    <article class="content-card">
+      <h2>Historie der Zahlungen</h2>
+      <ul class="timeline">
+        {% if payment_events.is_empty() %}
+          <li>Noch keine Zahlungseingaenge dokumentiert.</li>
+        {% else %}
+          {% for event in payment_events %}
+            <li><strong>{{ event.amount_label }}</strong> am {{ event.created_at_label }}<br>{{ event.note }}</li>
+          {% endfor %}
+        {% endif %}
+      </ul>
+    </article>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container card-grid card-grid-two">
+    <article class="content-card">
+      <h2>Interne Notiz hinzufuegen</h2>
+      <form method="post" action="/admin/kunden/{{ profile.customer_id }}/notizen" class="stack-form">
+        <input type="hidden" name="csrf_token" value="{{ shell.csrf_token }}">
+        <label>Notiz<textarea name="note" rows="5" required></textarea></label>
+        <button class="button button-primary" type="submit">Notiz speichern</button>
+      </form>
+    </article>
+    <article class="content-card">
+      <h2>Vorhandene Notizen</h2>
+      <ul class="timeline">
+        {% if notes.is_empty() %}
+          <li>Es sind noch keine internen Notizen hinterlegt.</li>
+        {% else %}
+          {% for note in notes %}
+            <li><strong>{{ note.author_name }}</strong> am {{ note.created_at_label }}<br>{{ note.note }}</li>
+          {% endfor %}
+        {% endif %}
+      </ul>
+    </article>
+  </div>
+</section>
+{% endblock %}

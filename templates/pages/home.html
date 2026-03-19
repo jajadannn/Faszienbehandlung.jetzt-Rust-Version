@@ -1,0 +1,131 @@
+{% extends "layouts/base.html" %}
+
+{% block content %}
+<section class="hero">
+  <div class="container hero-grid">
+    <div class="hero-copy">
+      <p class="eyebrow">www.faszienbehandlung.jetzt</p>
+      <h1>Faszienbehandlung mit Ruhe, Struktur und professioneller Terminfuehrung.</h1>
+      <p class="lead">Die Praxiswebseite verbindet medizinisch-serioese Ansprache mit klarer Nutzerfuehrung: behutsame Einordnung, transparente Preise, datenschutzbewusste Prozesse und eine Terminbuchung, die sofort Vertrauen schafft.</p>
+      <div class="hero-actions">
+        <a class="button button-primary" href="/terminbuchung">Jetzt Termin anfragen</a>
+        <a class="button button-secondary" href="/faszienbehandlung">Mehr erfahren</a>
+      </div>
+      <div class="hero-note">
+        <strong>Wichtig:</strong> Die Inhalte sind bewusst sachlich formuliert und ersetzen keine individuelle aerztliche Abklaerung bei akuten oder unklaren Beschwerden.
+      </div>
+    </div>
+    <div class="hero-panel">
+      <div class="panel-card">
+        <p class="eyebrow">Auf einen Blick</p>
+        <ul class="metric-list">
+          {% for stat in stats %}
+            <li>
+              <strong>{{ stat.value }}</strong>
+              <span>{{ stat.label }}</span>
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-intro">
+      <p class="eyebrow">Worum es geht</p>
+      <h2>Sanfte Orientierung fuer Menschen mit Spannungsgefuehl, Bewegungsfragen und dem Wunsch nach einem ruhigen Praxisrahmen.</h2>
+      <p>Faszienbehandlung wird hier nicht sensationalisiert, sondern nachvollziehbar eingeordnet. Die Startseite erklaert kurz, wo die Methode sinnvoll erscheinen kann, welche Erwartungen realistisch sind und wie Interessenten den naechsten Schritt ohne Huerden gehen koennen.</p>
+    </div>
+    <div class="card-grid card-grid-three">
+      {% for item in complaints %}
+        <article class="content-card card--{{ item.accent }}">
+          <h3>{{ item.title }}</h3>
+          <p>{{ item.text }}</p>
+        </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="section section-soft">
+  <div class="container">
+    <div class="section-intro">
+      <p class="eyebrow">Vorteile der Behandlung</p>
+      <h2>Persoenlich, klar kommuniziert und ohne ueberladene Reize.</h2>
+    </div>
+    <div class="card-grid card-grid-three">
+      {% for item in benefits %}
+        <article class="content-card">
+          <h3>{{ item.title }}</h3>
+          <p>{{ item.text }}</p>
+        </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container split">
+    <div>
+      <p class="eyebrow">Vertrauen</p>
+      <h2>Die Seite fuehrt direkt zur Terminbuchung und bleibt dabei sachlich, hochwertig und glaubwuerdig.</h2>
+      <p>Statt generischer Baukastenformulierungen setzt die Webseite auf serioese Praxistexte, transparente Preisanker, FAQ-Antworten mit echtem Nutzwert sowie Datenschutz- und Sicherheitsstrukturen, die bereits fuer einen spaeteren Livebetrieb vorbereitet sind.</p>
+      <a class="button button-secondary" href="/leistungen-preise">Leistungen & Preise ansehen</a>
+    </div>
+    <div class="stack">
+      {% for item in trust %}
+        <article class="content-card card--{{ item.accent }}">
+          <h3>{{ item.title }}</h3>
+          <p>{{ item.text }}</p>
+        </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="section section-accent">
+  <div class="container">
+    <div class="section-intro">
+      <p class="eyebrow">Preishinweis</p>
+      <h2>Ersttermine ab 89 EUR, Folgetermine ab 79 EUR.</h2>
+      <p>Die Preise sind bewusst transparent. Fuer abweichende Umfaenge oder besondere Konstellationen sollte die finale Preisgestaltung vor Livegang verbindlich mit der Praxisorganisation abgestimmt werden.</p>
+    </div>
+    <div class="card-grid card-grid-three">
+      {% for service in services %}
+        <article class="service-card">
+          <p class="service-price">{{ service.price }}</p>
+          <h3>{{ service.title }}</h3>
+          <p>{{ service.subtitle }}</p>
+          <ul>
+            {% for bullet in service.bullets %}
+              <li>{{ bullet }}</li>
+            {% endfor %}
+          </ul>
+        </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-intro">
+      <p class="eyebrow">FAQ</p>
+      <h2>Hauefige Fragen vor der ersten Anfrage.</h2>
+    </div>
+    <div class="faq-list">
+      {% for item in faqs %}
+        <details class="faq-item">
+          <summary>{{ item.question }}</summary>
+          <p>{{ item.answer }}</p>
+        </details>
+      {% endfor %}
+    </div>
+    <div class="center-actions">
+      <a class="button button-ghost" href="/faq">Alle Fragen ansehen</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

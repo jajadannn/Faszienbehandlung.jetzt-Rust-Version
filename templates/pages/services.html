@@ -1,0 +1,42 @@
+{% extends "layouts/base.html" %}
+
+{% block content %}
+<section class="page-hero">
+  <div class="container narrow">
+    <p class="eyebrow">Leistungen & Preise</p>
+    <h1>Transparente Angebote fuer eine serioese Praxisorganisation.</h1>
+    <p class="lead">Die Preise sind bewusst nachvollziehbar und wirken nicht versteckt. Damit unterstuetzt die Seite sowohl Vertrauen als auch eine gute Vorqualifizierung vor der Terminbuchung.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container card-grid card-grid-three">
+    {% for service in services %}
+      <article class="service-card service-card-large">
+        <p class="service-price">{{ service.price }}</p>
+        <h2>{{ service.title }}</h2>
+        <p>{{ service.subtitle }}</p>
+        <ul>
+          {% for bullet in service.bullets %}
+            <li>{{ bullet }}</li>
+          {% endfor %}
+        </ul>
+      </article>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="section section-soft">
+  <div class="container split">
+    <div>
+      <h2>Hinweise zur Preisstruktur</h2>
+      <p>Die angegebenen Preise sind realistische Beispielwerte fuer eine produktionsnahe Praxiswebseite. Vor Livegang sollten tatsaechliche Terminlaengen, Stornohinweise, Umsatzsteuerfragen und Zahlungsablaeufe final abgestimmt werden.</p>
+    </div>
+    <article class="content-card card--plum">
+      <h3>Terminbuchung prominent integriert</h3>
+      <p>Von hier fuehrt der naechste Schritt konsequent in die Buchung. So bleibt die Nutzerreise klar: informieren, Vertrauen fassen, Termin anfragen.</p>
+      <a class="button button-primary" href="/terminbuchung">Termin anfragen</a>
+    </article>
+  </div>
+</section>
+{% endblock %}

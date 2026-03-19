@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ shell.meta.title }}</title>
+  <meta name="description" content="{{ shell.meta.description }}">
+  <link rel="canonical" href="{{ shell.meta.canonical_url }}">
+  <meta property="og:type" content="{{ shell.meta.og_type }}">
+  <meta property="og:title" content="{{ shell.meta.og_title }}">
+  <meta property="og:description" content="{{ shell.meta.og_description }}">
+  <meta property="og:url" content="{{ shell.meta.og_url }}">
+  <meta property="og:image" content="{{ shell.meta.og_image }}">
+  <meta name="theme-color" content="#70AECD">
+  <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/static/css/site.css">
+  <script defer src="/static/js/site.js"></script>
+</head>
+<body>
+  <div class="page-shell">
+    <header class="site-header">
+      <div class="container nav-wrap">
+        <a href="/" class="brand">
+          <span class="brand-mark">fj</span>
+          <span class="brand-copy">
+            <strong>faszienbehandlung.jetzt</strong>
+            <span>ruhige Praxiswebseite mit klarer Terminfuehrung</span>
+          </span>
+        </a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">Menue</button>
+        <nav class="site-nav" id="site-nav">
+          <a href="/praxis">Praxis</a>
+          <a href="/faszienbehandlung">Faszienbehandlung</a>
+          <a href="/leistungen-preise">Leistungen</a>
+          <a href="/faq">FAQ</a>
+          <a href="/kontakt">Kontakt</a>
+          <a class="button button-secondary button-small" href="/terminbuchung">Termin buchen</a>
+          {% if let Some(user) = shell.current_user %}
+            {% if user.role == "admin" %}
+              <a class="button button-ghost button-small" href="/admin">Admin</a>
+            {% else %}
+              <a class="button button-ghost button-small" href="/konto">Konto</a>
+            {% endif %}
+            <form method="post" action="/logout" class="logout-form">
+              <input type="hidden" name="csrf_token" value="{{ shell.csrf_token }}">
+              <button type="submit" class="nav-link-button">Abmelden</button>
+            </form>
+          {% else %}
+            <a href="/anmeldung">Login</a>
+            <a class="button button-ghost button-small" href="/registrierung">Registrieren</a>
+          {% endif %}
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      {% block content %}{% endblock %}
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-grid">
+        <section>
+          <p class="eyebrow">Praxis</p>
+          <h2>{{ shell.practice.name }}</h2>
+          <p>{{ shell.practice.address_line_1 }}<br>{{ shell.practice.address_line_2 }}</p>
+          <p><a href="tel:{{ shell.practice.phone }}">{{ shell.practice.phone }}</a><br><a href="mailto:{{ shell.practice.email }}">{{ shell.practice.email }}</a></p>
+        </section>
+        <section>
+          <p class="eyebrow">Schnellzugriff</p>
+          <ul class="footer-list">
+            <li><a href="/terminbuchung">Terminbuchung</a></li>
+            <li><a href="/leistungen-preise">Leistungen & Preise</a></li>
+            <li><a href="/faq">FAQ</a></li>
+            <li><a href="/kontakt">Kontakt</a></li>
+          </ul>
+        </section>
+        <section>
+          <p class="eyebrow">Rechtliches</p>
+          <ul class="footer-list">
+            <li><a href="/impressum">Impressum</a></li>
+            <li><a href="/datenschutz">Datenschutz</a></li>
+            <li><a href="/registrierung">DSGVO-konforme Registrierung</a></li>
+          </ul>
+        </section>
+      </div>
+      <div class="container footer-bottom">
+        <p>&copy; {{ shell.year }} {{ shell.practice.name }}. Die Rechtstexte auf dieser Demo-Basis muessen vor dem Livegang fachlich geprueft werden.</p>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>

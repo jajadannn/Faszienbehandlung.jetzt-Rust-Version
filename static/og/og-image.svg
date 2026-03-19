@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#dff0f7"/>
+      <stop offset="65%" stop-color="#f7fbfd"/>
+      <stop offset="100%" stop-color="#f1dce9"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <circle cx="990" cy="120" r="140" fill="#70AECD" fill-opacity="0.22"/>
+  <circle cx="190" cy="530" r="180" fill="#964279" fill-opacity="0.16"/>
+  <rect x="88" y="82" width="1024" height="466" rx="44" fill="#ffffff" fill-opacity="0.92" stroke="#a8cfe0"/>
+  <text x="140" y="220" fill="#964279" font-size="34" font-family="Arial, sans-serif" letter-spacing="6">WWW.FASZIENBEHANDLUNG.JETZT</text>
+  <text x="140" y="320" fill="#173245" font-size="74" font-family="Georgia, serif">Faszienbehandlung</text>
+  <text x="140" y="398" fill="#173245" font-size="74" font-family="Georgia, serif">mit Ruhe und Struktur</text>
+  <text x="140" y="474" fill="#4d93b8" font-size="34" font-family="Arial, sans-serif">Terminbuchung, Kundenkonto und serioese Praxisansprache</text>
+</svg>

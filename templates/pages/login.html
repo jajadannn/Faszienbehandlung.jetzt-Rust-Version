@@ -1,0 +1,51 @@
+{% extends "layouts/base.html" %}
+
+{% block content %}
+<section class="page-hero">
+  <div class="container narrow">
+    <p class="eyebrow">Anmeldung</p>
+    <h1>Login fuer Kundenkonto und Admin-Bereich.</h1>
+    <p class="lead">Die Anmeldung nutzt serverseitige Sessions, sichere Cookies und eine klare Rollentrennung zwischen Kunden- und Verwaltungsbereich.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container form-shell">
+    <div class="form-panel">
+      {% if let Some(flash) = flash %}
+        <div class="flash flash-{{ flash.kind }}">
+          <strong>{{ flash.title }}</strong>
+          <p>{{ flash.text }}</p>
+        </div>
+      {% endif %}
+      {% if !errors.is_empty() %}
+        <div class="flash flash-error">
+          <strong>Anmeldung nicht moeglich.</strong>
+          <ul>
+            {% for error in errors %}
+              <li>{{ error }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+      <form method="post" class="stack-form">
+        <input type="hidden" name="csrf_token" value="{{ shell.csrf_token }}">
+        <label>
+          E-Mail-Adresse
+          <input type="email" name="email" value="{{ form.email }}" required>
+        </label>
+        <label>
+          Passwort
+          <input type="password" name="password" required>
+        </label>
+        <button class="button button-primary" type="submit">Sicher anmelden</button>
+      </form>
+    </div>
+    <aside class="info-panel">
+      <h2>Noch kein Konto?</h2>
+      <p>Fuer die Online-Terminbuchung ist ein geschuetztes Kundenkonto vorgesehen. So bleiben Buchungen, Zahlungsstatus und E-Mail-Bestaetigungen sauber zugeordnet.</p>
+      <a class="button button-secondary" href="/registrierung">Jetzt registrieren</a>
+    </aside>
+  </div>
+</section>
+{% endblock %}

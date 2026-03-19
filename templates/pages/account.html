@@ -1,0 +1,121 @@
+{% extends "layouts/base.html" %}
+
+{% block content %}
+<section class="page-hero">
+  <div class="container narrow">
+    <p class="eyebrow">Kundenkonto</p>
+    <h1>Persoenliche Daten, Termine und Zahlungen auf einen Blick.</h1>
+    <p class="lead">Der geschuetzte Kundenbereich zeigt nur die eigenen Daten und bleibt damit datenschutzbewusst und gut nachvollziehbar.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container dashboard-grid">
+    <article class="content-card">
+      <h2>{{ profile.full_name }}</h2>
+      <p>{{ profile.email }}<br>{{ profile.phone_number }}<br>{{ profile.city }}</p>
+      <p>E-Mail bestaetigt: <strong>{{ profile.email_verified_label }}</strong><br>Status: <strong>{{ profile.status_label }}</strong></p>
+    </article>
+    <article class="content-card card--sky">
+      <h2>Termine</h2>
+      <p>Gesamtbuchungen: <strong>{{ profile.appointment_count }}</strong></p>
+      <p>Naechster Termin: {{ profile.next_appointment_label }}</p>
+      <p>Letzter vergangener Termin: {{ profile.last_appointment_label }}</p>
+    </article>
+    <article class="content-card card--plum">
+      <h2>Zahlungsstatus</h2>
+      <p>Bereits bezahlt: <strong>{{ profile.total_paid_label }}</strong></p>
+      <p>Offen: <strong>{{ profile.total_open_label }}</strong></p>
+      <p>Gesamtsumme: {{ profile.total_value_label }}</p>
+    </article>
+  </div>
+</section>
+
+<section class="section section-soft">
+  <div class="container">
+    <div class="section-intro">
+      <p class="eyebrow">Zukuenftige Termine</p>
+      <h2>Ihre geplanten Buchungen</h2>
+    </div>
+    <div class="card-grid card-grid-two">
+      {% if future_appointments.is_empty() %}
+        <article class="content-card">
+          <h3>Derzeit keine zukuenftigen Termine</h3>
+          <p>Nutzen Sie die Online-Buchung, um einen neuen Wunschtermin anzufragen.</p>
+          <a class="button button-primary" href="/terminbuchung">Termin buchen</a>
+        </article>
+      {% else %}
+        {% for appointment in future_appointments %}
+          <article class="content-card">
+            <h3>{{ appointment.desired_at_label }}</h3>
+            <p>Status: <strong>{{ appointment.status_label }}</strong></p>
+            <p>{{ appointment.message }}</p>
+            <p>Bezahlt: {{ appointment.paid_amount_label }}<br>Offen: {{ appointment.open_amount_label }}</p>
+          </article>
+        {% endfor %}
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="section-intro">
+      <p class="eyebrow">Vergangene Termine</p>
+      <h2>Bereits dokumentierte Eintraege</h2>
+    </div>
+    <div class="card-grid card-grid-two">
+      {% if past_appointments.is_empty() %}
+        <article class="content-card">
+          <h3>Noch keine vergangenen Termine</h3>
+          <p>Nach Ihrer ersten Behandlung erscheinen hier Verlauf und Zahlungsinformationen.</p>
+        </article>
+      {% else %}
+        {% for appointment in past_appointments %}
+          <article class="content-card">
+            <h3>{{ appointment.desired_at_label }}</h3>
+            <p>Status: <strong>{{ appointment.status_label }}</strong></p>
+            <p>{{ appointment.message }}</p>
+            <p>Gesamt: {{ appointment.total_amount_label }}<br>Bezahlt: {{ appointment.paid_amount_label }}</p>
+          </article>
+        {% endfor %}
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<section class="section section-soft">
+  <div class="container">
+    <div class="section-intro">
+      <p class="eyebrow">Zahlungen</p>
+      <h2>Ihre hinterlegten Zahlungspositionen</h2>
+    </div>
+    <div class="table-card">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Gesamt</th>
+            <th>Bezahlt</th>
+            <th>Offen</th>
+            <th>Status</th>
+            <th>Datum</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for payment in payments %}
+            <tr>
+              <td>#{{ payment.id }}</td>
+              <td>{{ payment.amount_total_label }}</td>
+              <td>{{ payment.amount_paid_label }}</td>
+              <td>{{ payment.amount_open_label }}</td>
+              <td>{{ payment.status_label }}</td>
+              <td>{{ payment.payment_date_label }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+{% endblock %}

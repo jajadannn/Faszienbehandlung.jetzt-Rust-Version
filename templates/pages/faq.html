@@ -1,0 +1,22 @@
+{% extends "layouts/base.html" %}
+
+{% block content %}
+<section class="page-hero">
+  <div class="container narrow">
+    <p class="eyebrow">FAQ</p>
+    <h1>Hauefige Fragen zu Behandlung, Buchung und Kundenkonto.</h1>
+    <p class="lead">Die Antworten sind bewusst sachlich gehalten und fuer eine serioese Praxiswebseite SEO-freundlich strukturiert.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container narrow faq-list">
+    {% for item in faqs %}
+      <details class="faq-item" {% if loop.first %}open{% endif %}>
+        <summary>{{ item.question }}</summary>
+        <p>{{ item.answer }}</p>
+      </details>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

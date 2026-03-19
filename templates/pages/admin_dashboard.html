@@ -1,0 +1,93 @@
+{% extends "layouts/base.html" %}
+
+{% block content %}
+<section class="page-hero">
+  <div class="container narrow">
+    <p class="eyebrow">Admin / Kundenverwaltung</p>
+    <h1>Kunden, Buchungen und offene Betraege professionell im Blick.</h1>
+    <p class="lead">Angemeldet als {{ admin_name }}. Der Bereich ist ausschliesslich fuer Administratoren gedacht und trennt Suchfunktion, Kennzahlen und Kundenprofile klar voneinander.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container dashboard-grid">
+    <article class="content-card">
+      <h2>Aktive Kunden</h2>
+      <p class="big-metric">{{ metrics.active_customers }}</p>
+    </article>
+    <article class="content-card card--sky">
+      <h2>Zukuenftige Termine</h2>
+      <p class="big-metric">{{ metrics.future_appointments }}</p>
+    </article>
+    <article class="content-card card--plum">
+      <h2>Offener Betrag</h2>
+      <p class="big-metric">{{ metrics.open_amount }}</p>
+    </article>
+    <article class="content-card">
+      <h2>Kunden mit offenen Posten</h2>
+      <p class="big-metric">{{ metrics.unpaid_customers }}</p>
+    </article>
+  </div>
+</section>
+
+<section class="section section-soft">
+  <div class="container">
+    <form method="get" class="filter-bar">
+      <input type="search" name="q" value="{{ filter.q }}" placeholder="Suche nach Name, E-Mail, Ort oder Telefon">
+      <select name="status">
+        <option value="">Status</option>
+        <option value="aktiv" {% if filter.status == "aktiv" %}selected{% endif %}>Aktiv</option>
+        <option value="inaktiv" {% if filter.status == "inaktiv" %}selected{% endif %}>Inaktiv</option>
+      </select>
+      <select name="verified">
+        <option value="">E-Mail bestaetigt</option>
+        <option value="ja" {% if filter.verified == "ja" %}selected{% endif %}>Ja</option>
+        <option value="nein" {% if filter.verified == "nein" %}selected{% endif %}>Nein</option>
+      </select>
+      <select name="payment">
+        <option value="">Zahlungsstatus</option>
+        <option value="offen" {% if filter.payment == "offen" %}selected{% endif %}>Offen</option>
+        <option value="bezahlt" {% if filter.payment == "bezahlt" %}selected{% endif %}>Bezahlt</option>
+      </select>
+      <button class="button button-primary" type="submit">Filtern</button>
+    </form>
+
+    <div class="table-card">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Kunde</th>
+            <th>Kontakt</th>
+            <th>Ort</th>
+            <th>E-Mail bestaetigt</th>
+            <th>Buchungen</th>
+            <th>Naechster Termin</th>
+            <th>Offen</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% if customers.is_empty() %}
+            <tr>
+              <td colspan="8">Keine Kunden fuer diese Suche gefunden.</td>
+            </tr>
+          {% else %}
+            {% for customer in customers %}
+              <tr>
+                <td>{{ customer.full_name }}<br><span class="muted">{{ customer.status_label }}</span></td>
+                <td>{{ customer.email }}<br>{{ customer.phone_number }}</td>
+                <td>{{ customer.city }}</td>
+                <td>{{ customer.email_verified_label }}</td>
+                <td>{{ customer.appointment_count }}</td>
+                <td>{{ customer.next_appointment_label }}</td>
+                <td>{{ customer.total_open_label }}</td>
+                <td><a class="button button-ghost button-small" href="/admin/kunden/{{ customer.customer_id }}">Profil</a></td>
+              </tr>
+            {% endfor %}
+          {% endif %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+{% endblock %}

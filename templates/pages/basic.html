@@ -1,0 +1,122 @@
+{% extends "layouts/base.html" %}
+
+{% block content %}
+{% if path_key == "about" %}
+  <section class="page-hero">
+    <div class="container narrow">
+      <p class="eyebrow">Ueber uns / Praxis</p>
+      <h1>Eine Praxis, die ruhig wirkt und professionell fuehrt.</h1>
+      <p class="lead">Die Praxis ist auf ein serioeses, persoenliches Erlebnis ausgelegt: viel Weissraum, klare Gespraechsfuehrung, nachvollziehbare Termine und eine Ansprache, die nicht uebertreibt.</p>
+    </div>
+  </section>
+  <section class="section">
+    <div class="container split">
+      <div>
+        <h2>Praxisbild und Haltung</h2>
+        <p>Menschen kommen nicht nur wegen einer Methode, sondern auch wegen eines Rahmens, in dem sie sich ernst genommen fuehlen. Genau darauf ist die Nutzerfuehrung dieser Webseite abgestimmt: klarer Einstieg, verstaendliche Inhalte und ein Kontaktweg, der ohne Reibung funktioniert.</p>
+        <p>Im Behandlungsalltag steht eine strukturierte Anamnese am Anfang. Es geht um alltagsnahe Beobachtungen, Spannungsgefuehl, Belastungen und realistische Zielsetzungen.</p>
+      </div>
+      <div class="stack">
+        <article class="content-card">
+          <h3>Ruhige Terminstruktur</h3>
+          <p>Ausreichend Zeit, datensparsame Formulare und ein Kundenkonto mit nachvollziehbaren Angaben zu Terminen und Zahlungen.</p>
+        </article>
+        <article class="content-card card--plum">
+          <h3>Persoenlich und lokal</h3>
+          <p>Die Sprache wirkt bewusst lokal und menschlich, damit Vertrauen nicht nur behauptet, sondern bereits digital spuerbar wird.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+{% else if path_key == "fascia" %}
+  <section class="page-hero">
+    <div class="container narrow">
+      <p class="eyebrow">Was ist Faszienbehandlung?</p>
+      <h1>Eine sachliche Einordnung statt grosser Versprechen.</h1>
+      <p class="lead">Faszien gelten als Bindegewebsstrukturen, die verschiedene Bereiche des Koerpers miteinander verbinden. In der Praxis wird das Thema zunehmend im Kontext von Bewegungswahrnehmung, Spannungsmustern und Belastungssteuerung betrachtet.</p>
+    </div>
+  </section>
+  <section class="section">
+    <div class="container narrow prose">
+      <h2>Wofuer die Erklaerseite gedacht ist</h2>
+      <p>Die Seite hilft Besucherinnen und Besuchern, die Methode einzuordnen, bevor sie buchen. Sie formuliert bewusst ohne Heilversprechen und macht deutlich, dass eine individuelle Bewertung immer vom konkreten Einzelfall abhaengt.</p>
+      <h2>Wie eine Behandlung in dieser Praxis verstanden wird</h2>
+      <p>Im Mittelpunkt stehen Anamnese, manuelle Impulse, Belastungseinordnung und alltagsbezogene Empfehlungen. Ziel der Webseite ist nicht, medizinische Garantien zu vermitteln, sondern Orientierung fuer eine professionelle Anfrage zu geben.</p>
+      <h2>Wann zusaetzliche Abklaerung sinnvoll ist</h2>
+      <p>Bei akuten, starken, neu auftretenden oder unklaren Beschwerden sollten Interessierte die Situation zusaetzlich aerztlich abklaeren lassen. Diese Einordnung wird auf der Seite bewusst transparent kommuniziert.</p>
+    </div>
+  </section>
+{% else if path_key == "contact" %}
+  <section class="page-hero">
+    <div class="container narrow">
+      <p class="eyebrow">Kontakt</p>
+      <h1>Direkt, ruhig und ohne Suchstress zur Praxis.</h1>
+      <p class="lead">Die Kontaktseite bietet eine lokale Basisstruktur fuer Praxisdaten, Erreichbarkeit und den direkten Weg zur Online-Terminbuchung.</p>
+    </div>
+  </section>
+  <section class="section">
+    <div class="container split">
+      <article class="content-card card--sky">
+        <h2>Praxisdaten</h2>
+        <p><strong>{{ shell.practice.name }}</strong><br>{{ shell.practice.address_line_1 }}<br>{{ shell.practice.address_line_2 }}</p>
+        <p>Telefon: <a href="tel:{{ shell.practice.phone }}">{{ shell.practice.phone }}</a><br>E-Mail: <a href="mailto:{{ shell.practice.email }}">{{ shell.practice.email }}</a></p>
+      </article>
+      <article class="content-card">
+        <h2>Hinweis zur Kontaktaufnahme</h2>
+        <p>Fuer strukturierte Terminwuensche ist die Online-Buchung der schnellste Weg. So werden notwendige Daten sauber erfasst, der Wohnort geprueft und die Anfrage datensparsam einem Kundenprofil zugeordnet.</p>
+        <a class="button button-primary" href="/terminbuchung">Zur Terminbuchung</a>
+      </article>
+    </div>
+  </section>
+{% else if path_key == "imprint" %}
+  <section class="page-hero">
+    <div class="container narrow">
+      <p class="eyebrow">Impressum</p>
+      <h1>Platzhalter fuer die verbindlichen Anbieterangaben.</h1>
+      <p class="lead">Dieses Impressum ist ein strukturiertes Grundgeruest. Vor dem echten Livegang muessen alle Angaben rechtlich und fachlich geprueft sowie vollstaendig ersetzt werden.</p>
+    </div>
+  </section>
+  <section class="section">
+    <div class="container narrow prose legal-box">
+      <h2>Anbieter</h2>
+      <p>{{ shell.practice.name }}<br>Inhaber/in: [Bitte ergaenzen]<br>{{ shell.practice.address_line_1 }}<br>{{ shell.practice.address_line_2 }}</p>
+      <h2>Kontakt</h2>
+      <p>Telefon: {{ shell.practice.phone }}<br>E-Mail: {{ shell.practice.email }}</p>
+      <h2>Berufsrechtliche Angaben</h2>
+      <p>[Bitte je nach tatsaechlicher Berufsbezeichnung, Kammerzugehoerigkeit, Aufsichtsbehoerde und einschlaegigen Vorschriften ergaenzen.]</p>
+      <h2>Wichtiger Hinweis</h2>
+      <p>Dieses Dokument ist nur ein Platzhalter. Es ersetzt keine rechtliche Beratung und muss vor Livegang individuell geprueft werden.</p>
+    </div>
+  </section>
+{% else if path_key == "privacy" %}
+  <section class="page-hero">
+    <div class="container narrow">
+      <p class="eyebrow">Datenschutz</p>
+      <h1>DSGVO-Grundgeruest mit klar markierten Platzhaltern.</h1>
+      <p class="lead">Die Datenschutzerklaerung bildet die benoetigten Verarbeitungen strukturiert ab, muss vor Livegang aber zwingend rechtlich fachgeprueft und an Hosting, Mailversand und reale Organisationsablaeufe angepasst werden.</p>
+    </div>
+  </section>
+  <section class="section">
+    <div class="container narrow prose legal-box">
+      <h2>1. Verantwortliche Stelle</h2>
+      <p>[Praxisname, Inhaber/in, Anschrift, E-Mail, Telefon ergaenzen.]</p>
+      <h2>2. Hosting und Server-Logs</h2>
+      <p>Platzhalter fuer Hosting-Anbieter, Serverstandort, Auftragsverarbeitung, Speicherdauer und technische Logdaten.</p>
+      <h2>3. Kontaktformular und Kommunikation</h2>
+      <p>Platzhalter fuer Rechtsgrundlage, Zweck, Speicherfrist und organisatorische Bearbeitung eingehender Kontaktanfragen.</p>
+      <h2>4. Terminbuchung</h2>
+      <p>Erfasst werden nur die fuer die Terminorganisation erforderlichen Daten, insbesondere Name, E-Mail-Adresse, Telefonnummer, Wohnort, Wunschtermin und optionale Nachricht.</p>
+      <h2>5. Registrierung und Login</h2>
+      <p>Platzhalter fuer Kundenkonto, Passwort-Hashing, Login-Sessions, Rollenmodell und Zugriffsbeschraenkung.</p>
+      <h2>6. E-Mail-Verifizierung</h2>
+      <p>Platzhalter fuer Double-Opt-in-nahe Verifizierung, Token-Speicherung, Gueltigkeitsdauer und Zweck der Bestaetigungs-E-Mails.</p>
+      <h2>7. Cookies / Sessions</h2>
+      <p>Platzhalter fuer technisch notwendige Session- und CSRF-Cookies ohne Marketing-Zweck.</p>
+      <h2>8. Zahlungsstatus und Kundendatenverarbeitung</h2>
+      <p>Platzhalter fuer Verarbeitung von Termin- und Zahlungsdaten im Kundenkonto und im Admin-Bereich der Praxis.</p>
+      <h2>9. Rechtlicher Hinweis</h2>
+      <p>Diese Datenschutzerklaerung ist ein technisches Grundgeruest und muss vor dem Livegang zwingend rechtlich fachlich geprueft werden.</p>
+    </div>
+  </section>
+{% endif %}
+{% endblock %}
