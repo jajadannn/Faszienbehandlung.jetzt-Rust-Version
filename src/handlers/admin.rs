@@ -59,7 +59,7 @@ pub async fn dashboard(
         jar,
         "/admin",
         "Admin | Kundenverwaltung, Termine und Zahlungen",
-        "Professioneller Admin-Bereich fuer Kundenverwaltung, Terminstatus, Zahlungen, offene Betraege und interne Notizen.",
+        "Professioneller Admin-Bereich für Kundenverwaltung, Terminstatus, Zahlungen, offene Beträge und interne Notizen.",
     )
     .await?;
 
@@ -254,11 +254,11 @@ pub async fn add_payment(
         now_utc()
     } else {
         let parsed = NaiveDate::parse_from_str(&form.payment_date, "%Y-%m-%d").map_err(|_| {
-            AppError::BadRequest("Bitte geben Sie ein gueltiges Zahlungsdatum an.".to_string())
+            AppError::BadRequest("Bitte geben Sie ein gültiges Zahlungsdatum an.".to_string())
         })?;
         parsed
             .and_hms_opt(12, 0, 0)
-            .ok_or_else(|| AppError::BadRequest("Das Zahlungsdatum ist ungueltig.".to_string()))?
+            .ok_or_else(|| AppError::BadRequest("Das Zahlungsdatum ist ungültig.".to_string()))?
     };
 
     let now = now_utc();
@@ -286,7 +286,7 @@ pub async fn add_payment(
                 Some(FlashMessage {
                     kind: "error".to_string(),
                     title: "Zahlung konnte nicht verarbeitet werden".to_string(),
-                    text: "Die neue Summe der Teilzahlungen uebersteigt den Gesamtbetrag."
+                    text: "Die neue Summe der Teilzahlungen übersteigt den Gesamtbetrag."
                         .to_string(),
                 }),
                 admin.full_name,
@@ -376,7 +376,7 @@ pub async fn update_appointment_status(
             Some(FlashMessage {
                 kind: "error".to_string(),
                 title: "Status konnte nicht aktualisiert werden".to_string(),
-                text: "Bitte waehlen Sie einen gueltigen Status.".to_string(),
+                text: "Bitte wählen Sie einen gültigen Status.".to_string(),
             }),
             admin.full_name,
         )
@@ -491,7 +491,7 @@ async fn render_customer_detail_page(
             created_at_label: format_datetime(&event.created_at),
             note: event
                 .note
-                .unwrap_or_else(|| "Ohne zusaetzlichen Hinweis".to_string()),
+                .unwrap_or_else(|| "Ohne zusätzlichen Hinweis".to_string()),
         })
         .collect();
     let note_views = notes
@@ -682,7 +682,7 @@ fn map_appointment_row(appointment: AppointmentOverviewRow) -> AppointmentView {
         status_label: appointment_status_label(&appointment.status).to_string(),
         message: appointment
             .message
-            .unwrap_or_else(|| "Keine zusaetzliche Nachricht".to_string()),
+            .unwrap_or_else(|| "Keine zusätzliche Nachricht".to_string()),
         total_amount_label: format_cents(appointment.total_amount_cents),
         paid_amount_label: format_cents(appointment.amount_paid_cents),
         open_amount_label: format_cents(appointment.amount_open_cents),

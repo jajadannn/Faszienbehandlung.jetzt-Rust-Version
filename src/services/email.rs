@@ -58,9 +58,9 @@ impl EmailService {
         token: &str,
     ) -> AppResult<()> {
         let verify_url = format!("{}/verify-email?token={}", self.base_url, token);
-        let subject = "Bitte bestaetigen Sie Ihre E-Mail-Adresse";
+        let subject = "Bitte bestätigen Sie Ihre E-Mail-Adresse";
         let body = format!(
-            "Guten Tag {name},\n\nbitte bestaetigen Sie Ihre E-Mail-Adresse fuer Ihr Kundenkonto bei {practice}:\n{verify_url}\n\nDer Link ist 24 Stunden gueltig.\n\nHinweis: Ihre Terminanfrage wird erst nach der Bestaetigung Ihrer E-Mail-Adresse verbindlich weiterbearbeitet.\n\nFreundliche Gruesse\n{practice}",
+            "Guten Tag {name},\n\nbitte bestätigen Sie Ihre E-Mail-Adresse für Ihr Kundenkonto bei {practice}:\n{verify_url}\n\nDer Link ist 24 Stunden gültig.\n\nHinweis: Ihre Terminanfrage wird erst nach der Bestätigung Ihrer E-Mail-Adresse verbindlich weiterbearbeitet.\n\nFreundliche Grüße\n{practice}",
             practice = self.practice_name
         );
 
@@ -76,12 +76,12 @@ impl EmailService {
     ) -> AppResult<()> {
         let subject = "Ihre Terminanfrage bei faszienbehandlung.jetzt";
         let follow_up = if email_verified {
-            "Wir melden uns nach interner Pruefung mit einer Rueckmeldung zu Ihrem Terminwunsch."
+            "Wir melden uns nach interner Prüfung mit einer Rückmeldung zu Ihrem Terminwunsch."
         } else {
-            "Bitte bestaetigen Sie zuerst Ihre E-Mail-Adresse ueber den gesendeten Verifizierungslink."
+            "Bitte bestätigen Sie zuerst Ihre E-Mail-Adresse über den gesendeten Verifizierungslink."
         };
         let body = format!(
-            "Guten Tag {name},\n\nvielen Dank fuer Ihre Anfrage bei {practice}.\nGewuenschter Termin: {desired_at}\n\n{follow_up}\n\nFreundliche Gruesse\n{practice}",
+            "Guten Tag {name},\n\nvielen Dank für Ihre Anfrage bei {practice}.\nGewünschter Termin: {desired_at}\n\n{follow_up}\n\nFreundliche Grüße\n{practice}",
             practice = self.practice_name,
             desired_at = format_datetime(desired_at),
         );
@@ -98,10 +98,10 @@ impl EmailService {
             MailSender::Smtp(transport) => {
                 let email = Message::builder()
                     .from(self.from.parse::<Mailbox>().map_err(|error| {
-                        AppError::BadRequest(format!("SMTP_FROM ist ungueltig: {error}"))
+                        AppError::BadRequest(format!("SMTP_FROM ist ungültig: {error}"))
                     })?)
                     .to(to_email.parse::<Mailbox>().map_err(|error| {
-                        AppError::BadRequest(format!("Empfaengeradresse ist ungueltig: {error}"))
+                        AppError::BadRequest(format!("Empfängeradresse ist ungültig: {error}"))
                     })?)
                     .subject(subject)
                     .body(body.to_string())

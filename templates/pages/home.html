@@ -1,131 +1,230 @@
 {% extends "layouts/base.html" %}
 
 {% block content %}
-<section class="hero">
-  <div class="container hero-grid">
-    <div class="hero-copy">
-      <p class="eyebrow">www.faszienbehandlung.jetzt</p>
-      <h1>Faszienbehandlung mit Ruhe, Struktur und professioneller Terminfuehrung.</h1>
-      <p class="lead">Die Praxiswebseite verbindet medizinisch-serioese Ansprache mit klarer Nutzerfuehrung: behutsame Einordnung, transparente Preise, datenschutzbewusste Prozesse und eine Terminbuchung, die sofort Vertrauen schafft.</p>
-      <div class="hero-actions">
-        <a class="button button-primary" href="/terminbuchung">Jetzt Termin anfragen</a>
-        <a class="button button-secondary" href="/faszienbehandlung">Mehr erfahren</a>
+<div class="home-reference">
+  <section class="hero" id="home">
+    <div class="hero-media" aria-hidden="true">
+      <img
+        src="/static/media/Start-960.v2.jpg"
+        srcset="/static/media/Start-960.v2.jpg 960w, /static/media/Start-1400.v2.jpg 1400w"
+        sizes="100vw"
+        alt=""
+        fetchpriority="high"
+        decoding="async"
+        width="1400"
+        height="1050"
+      >
+    </div>
+    <div class="hero-inner">
+      <div class="hero-badge">&#10022; Gantke&reg; zertifizierter Faszienbehandler &middot; {{ shell.practice.region_label }}</div>
+      <h1>Endlich wieder<br><em>schmerzfrei</em> bewegen.</h1>
+      <p class="hero-sub">Chronische R&uuml;ckenschmerzen, Verspannungen, Migr&auml;ne &ndash; die Gantke&reg; Faszienbehandlung l&ouml;st die Ursache, nicht nur die Symptome. Sp&uuml;rbar ab der ersten Sitzung.</p>
+      <div class="hero-cta-group">
+        <a class="btn-primary" href="/terminbuchung">&#128197; Jetzt Termin buchen</a>
+        <a class="btn-secondary" href="#ueber">Mehr erfahren &#8595;</a>
       </div>
-      <div class="hero-note">
-        <strong>Wichtig:</strong> Die Inhalte sind bewusst sachlich formuliert und ersetzen keine individuelle aerztliche Abklaerung bei akuten oder unklaren Beschwerden.
+      <p class="hero-note">&#10003; Online buchbar &nbsp;&middot;&nbsp; &#10003; {{ shell.practice.appointment_duration_short }} ab {{ shell.practice.single_session_price_label }} &nbsp;&middot;&nbsp; &#10003; Kostenlose Parkpl&auml;tze</p>
+    </div>
+  </section>
+
+  <section class="section-white" id="beschwerden">
+    <div class="container">
+      <div class="section-tag">Beschwerdebilder</div>
+      <h2 class="section-title">Leidest du unter<br><em>diesen Beschwerden?</em></h2>
+      <div class="quick-answer">
+        <strong>Kurzantwort</strong>
+        <p>Die Gantke&reg; Faszienbehandlung ist unterst&uuml;tzend bei chronischen Schmerzen, Verspannungen und eingeschr&auml;nkter Beweglichkeit &ndash; f&uuml;r alle Altersgruppen, vollst&auml;ndig schmerzfrei. {{ shell.practice.appointment_duration_verbose }}, {{ shell.practice.single_session_price_label }}, Praxis in {{ shell.practice.address_line_2 }}.</p>
+      </div>
+      <p class="section-lead">Die Faszienbehandlung wirkt ganzheitlich &ndash; vom Fu&szlig; bis zum Kopf. Diese Beschwerden sprechen besonders gut auf die Gantke&reg; Methode an:</p>
+      <div class="pain-grid">
+        <div class="pain-card"><div class="pain-emoji">&#128281;</div><h3>R&uuml;ckenschmerzen</h3><p>Chronische Schmerzen im Lenden- oder Brustwirbels&auml;ulenbereich</p></div>
+        <div class="pain-card"><div class="pain-emoji">&#129301;</div><h3>Migr&auml;ne &amp; Kopfschmerzen</h3><p>Wiederkehrende Kopfschmerzen und Spannungskopfschmerzen</p></div>
+        <div class="pain-card"><div class="pain-emoji">&#128170;</div><h3>Nacken &amp; Schulter</h3><p>Verspannungen, Blockaden und eingeschr&auml;nkte Beweglichkeit</p></div>
+        <div class="pain-card"><div class="pain-emoji">&#129461;</div><h3>Knie &amp; H&uuml;fte</h3><p>Gelenkschmerzen, Arthrose-Beschwerden und Bewegungseinschr&auml;nkung</p></div>
+        <div class="pain-card"><div class="pain-emoji">&#128560;</div><h3>Stress &amp; Ersch&ouml;pfung</h3><p>Innere Anspannung, Burnout-Symptome und chronische M&uuml;digkeit</p></div>
+        <div class="pain-card"><div class="pain-emoji">&#129657;</div><h3>Nach Verletzungen</h3><p>Rehabilitation nach Operationen, Unf&auml;llen und Sportverletzungen</p></div>
+      </div>
+      <div class="contra-note"><strong>Kontraindikationen:</strong> Die Behandlung ist nicht geeignet bei akuten Entz&uuml;ndungen, Fieber, Metastasen, frischen Operationswunden oder Thrombosen. Bitte teile mir Vorerkrankungen vorab mit.</div>
+    </div>
+  </section>
+
+  <section class="section-pale" id="ueber">
+    <div class="container">
+      <div class="section-tag">&Uuml;ber {{ shell.practice.practitioner_name }}</div>
+      <h2 class="section-title">Dein Behandler &ndash;<br><em>Mensch &amp; Fachmann</em></h2>
+      <div class="about-split">
+        <div class="about-photo-wrap">
+          <div class="about-photo">
+            <img
+              src="/static/media/Portrait-240.v2.jpg"
+              srcset="/static/media/Portrait-240.v2.jpg 240w, /static/media/Portrait-320.v2.jpg 320w, /static/media/Portrait-480.v2.jpg 480w"
+              sizes="(max-width: 768px) 145px, 240px"
+              alt="{{ shell.practice.practitioner_name }} &ndash; Gantke&reg; Faszienbehandler"
+              width="240"
+              height="280"
+              loading="lazy"
+              decoding="async"
+            >
+          </div>
+          <div class="about-creds">
+            <div class="cred-badge"><span class="ci">&#127891;</span> Gantke&reg; zertifizierter Faszienbehandler</div>
+            <div class="cred-badge"><span class="ci">&#128205;</span> {{ shell.practice.address_line_2 }}</div>
+            <div class="cred-badge"><span class="ci">&#127968;</span> Hausbesuche in {{ shell.practice.house_call_area }}</div>
+          </div>
+        </div>
+        <div class="about-text">
+          <h3>Hallo, ich bin {{ shell.practice.practitioner_name }}.</h3>
+          <p>Als zertifizierter Gantke&reg; Faszienbehandler begleite ich Menschen in der Region {{ shell.practice.region_label }} dabei, ihre Beweglichkeit zur&uuml;ckzugewinnen und chronische Beschwerden achtsam einzuordnen.</p>
+          <p>Die Gantke&reg; Methode hat mich &uuml;berzeugt, weil sie an der Ursache ansetzt: verklebte und fehlgespannte Faszien. Mit gezielten, sanften Grifftechniken l&ouml;se ich diese Strukturen &ndash; sp&uuml;rbar und ganzheitlich.</p>
+          <p>Jede Behandlung beginnt mit einem pers&ouml;nlichen Gespr&auml;ch. Ich nehme mir Zeit f&uuml;r dich und passe die Sitzung individuell an deine Beschwerden und deinen K&ouml;rper an.</p>
+          <div class="fact-row">
+            <div class="fact-item"><div class="fact-val">{{ shell.practice.appointment_duration_short }}</div><div class="fact-desc">Behandlungsdauer je Sitzung</div></div>
+            <div class="fact-item"><div class="fact-val">{{ shell.practice.single_session_price_label }}</div><div class="fact-desc">Einzelbehandlung inkl. Beratung</div></div>
+            <div class="fact-item"><div class="fact-val">Termine</div><div class="fact-desc">{{ shell.practice.opening_hours_summary }}</div></div>
+            <div class="fact-item"><div class="fact-val">+ {{ shell.practice.house_call_fee_label }}</div><div class="fact-desc">Fahrtpauschale f&uuml;r Hausbesuche</div></div>
+          </div>
+          <div class="about-action"><a class="btn-primary" href="/terminbuchung">Termin vereinbaren &rarr;</a></div>
+        </div>
       </div>
     </div>
-    <div class="hero-panel">
-      <div class="panel-card">
-        <p class="eyebrow">Auf einen Blick</p>
-        <ul class="metric-list">
-          {% for stat in stats %}
-            <li>
-              <strong>{{ stat.value }}</strong>
-              <span>{{ stat.label }}</span>
-            </li>
-          {% endfor %}
-        </ul>
+  </section>
+
+  <section class="section-white" id="methode">
+    <div class="container">
+      <div class="section-tag">Die Methode</div>
+      <h2 class="section-title">Was ist die<br><em>Gantke&reg; Faszienbehandlung?</em></h2>
+      <div class="quick-answer">
+        <strong>Kurzantwort</strong>
+        <p>Die Gantke&reg; Methode ist eine manuelle Faszientherapie, entwickelt von Robert Gantke. Gezielte Grifftechniken l&ouml;sen Verklebungen im Bindegewebe &ndash; schmerzfrei, ohne Ger&auml;te, {{ shell.practice.appointment_duration_verbose }}, ganzheitlich vom Fu&szlig; bis zum Kopf.</p>
+      </div>
+      <p class="section-lead">Faszien sind das Bindegewebsnetz, das deinen gesamten K&ouml;rper durchzieht. Wenn sie verkleben oder verh&auml;rten, entstehen Schmerzen und Bewegungseinschr&auml;nkungen &ndash; oft weit entfernt vom eigentlichen Problem.</p>
+      <div class="benefit-list">
+        <div class="benefit-item"><div class="benefit-dot"></div><div><h3>Sanft &amp; tief wirkend</h3><p>Pr&auml;zise manuelle Grifftechniken l&ouml;sen Verklebungen vollst&auml;ndig schmerzfrei und ohne Hilfsmittel.</p></div></div>
+        <div class="benefit-item"><div class="benefit-dot"></div><div><h3>Ganzheitlicher Ansatz</h3><p>Faszien bilden ein k&ouml;rperweites Netzwerk. Die Behandlung wirkt systemisch &ndash; strukturelle Fehlspannungen werden an der Ursache korrigiert, nicht nur lokal.</p></div></div>
+        <div class="benefit-item"><div class="benefit-dot"></div><div><h3>Nachhaltiger als klassische Massage</h3><p>Klassische Massage behandelt prim&auml;r die Muskulatur. Gantke&reg; zielt auf das fasziale Bindegewebsnetz &ndash; die Wirkung ist langfristiger und ganzheitlicher.</p></div></div>
+        <div class="benefit-item"><div class="benefit-dot"></div><div><h3>F&uuml;r alle Altersgruppen</h3><p>Die sanfte Technik passt sich deinem individuellen Gewebe an &ndash; egal ob jung, alt, sportlich oder wenig bewegt.</p></div></div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<section class="section">
-  <div class="container">
-    <div class="section-intro">
-      <p class="eyebrow">Worum es geht</p>
-      <h2>Sanfte Orientierung fuer Menschen mit Spannungsgefuehl, Bewegungsfragen und dem Wunsch nach einem ruhigen Praxisrahmen.</h2>
-      <p>Faszienbehandlung wird hier nicht sensationalisiert, sondern nachvollziehbar eingeordnet. Die Startseite erklaert kurz, wo die Methode sinnvoll erscheinen kann, welche Erwartungen realistisch sind und wie Interessenten den naechsten Schritt ohne Huerden gehen koennen.</p>
+  <section class="section-sky" id="ablauf">
+    <div class="container">
+      <div class="section-tag">So l&auml;uft es ab</div>
+      <h2 class="section-title">Deine Behandlung in<br><em>3 einfachen Schritten</em></h2>
+      <p class="section-lead">Unkompliziert, pers&ouml;nlich und auf dich abgestimmt.</p>
+      <div class="steps-row">
+        <div class="step"><div class="step-num">1</div><div><h3>Erstgespr&auml;ch &amp; Analyse</h3><p>Wir besprechen deine Beschwerden und Ziele. Ich analysiere K&ouml;rperhaltung und Bewegungsmuster, um die Behandlung optimal abzustimmen.</p></div></div>
+        <div class="step"><div class="step-num">2</div><div><h3>Gantke&reg; Faszienbehandlung</h3><p>Du liegst bekleidet auf einer komfortablen Liege. Sanfte, gezielte Griffe l&ouml;sen Faszienverklebungen. Viele empfinden die Sitzung als tief entspannend.</p></div></div>
+        <div class="step"><div class="step-num">3</div><div><h3>Nachgespr&auml;ch &amp; &Uuml;bungen</h3><p>Du erh&auml;ltst individuelle Tipps und &Uuml;bungen f&uuml;r zu Hause, damit der Behandlungserfolg sich nachhaltig festigt.</p></div></div>
+      </div>
+      <div class="steps-cta">
+        <p>Eine Sitzung dauert {{ shell.practice.appointment_duration_verbose }} &middot; Hausbesuche in {{ shell.practice.house_call_area }} m&ouml;glich</p>
+        <a class="btn-cta-large" href="/terminbuchung">&#128197; Termin jetzt buchen</a>
+      </div>
     </div>
-    <div class="card-grid card-grid-three">
-      {% for item in complaints %}
-        <article class="content-card card--{{ item.accent }}">
-          <h3>{{ item.title }}</h3>
-          <p>{{ item.text }}</p>
-        </article>
-      {% endfor %}
-    </div>
-  </div>
-</section>
+  </section>
 
-<section class="section section-soft">
-  <div class="container">
-    <div class="section-intro">
-      <p class="eyebrow">Vorteile der Behandlung</p>
-      <h2>Persoenlich, klar kommuniziert und ohne ueberladene Reize.</h2>
+  <section class="section-white" id="bewertungen">
+    <div class="container">
+      <div class="section-tag">Kundenstimmen</div>
+      <h2 class="section-title">Das sagen<br><em>meine Klienten</em></h2>
+      <div class="testi-grid">
+        <div class="testi-card"><div class="stars-row">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p>Nach nur drei Behandlungen sind meine chronischen Nackenschmerzen, die mich jahrelang gequ&auml;lt haben, fast vollst&auml;ndig verschwunden. Einfach unglaublich!</p><div class="testi-author">&ndash; Sandra M., aus der Region</div></div>
+        <div class="testi-card"><div class="stars-row">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p>{{ shell.practice.practitioner_name }} nimmt sich wirklich Zeit und erkl&auml;rt genau, was gemacht wird. Ich f&uuml;hle mich nach jeder Sitzung wie neu &ndash; entspannt und so viel beweglicher.</p><div class="testi-author">&ndash; Klaus W., aus dem Umland</div></div>
+        <div class="testi-card"><div class="stars-row">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p>Meine Knieschmerzen haben sich nach der Behandlungsserie deutlich gebessert. Ich kann wieder Sport machen &ndash; sehr empfehlenswert!</p><div class="testi-author">&ndash; Maria K., aus dem Praxisumfeld</div></div>
+      </div>
     </div>
-    <div class="card-grid card-grid-three">
-      {% for item in benefits %}
-        <article class="content-card">
-          <h3>{{ item.title }}</h3>
-          <p>{{ item.text }}</p>
-        </article>
-      {% endfor %}
-    </div>
-  </div>
-</section>
+  </section>
 
-<section class="section">
-  <div class="container split">
-    <div>
-      <p class="eyebrow">Vertrauen</p>
-      <h2>Die Seite fuehrt direkt zur Terminbuchung und bleibt dabei sachlich, hochwertig und glaubwuerdig.</h2>
-      <p>Statt generischer Baukastenformulierungen setzt die Webseite auf serioese Praxistexte, transparente Preisanker, FAQ-Antworten mit echtem Nutzwert sowie Datenschutz- und Sicherheitsstrukturen, die bereits fuer einen spaeteren Livebetrieb vorbereitet sind.</p>
-      <a class="button button-secondary" href="/leistungen-preise">Leistungen & Preise ansehen</a>
-    </div>
-    <div class="stack">
-      {% for item in trust %}
-        <article class="content-card card--{{ item.accent }}">
-          <h3>{{ item.title }}</h3>
-          <p>{{ item.text }}</p>
-        </article>
-      {% endfor %}
-    </div>
-  </div>
-</section>
-
-<section class="section section-accent">
-  <div class="container">
-    <div class="section-intro">
-      <p class="eyebrow">Preishinweis</p>
-      <h2>Ersttermine ab 89 EUR, Folgetermine ab 79 EUR.</h2>
-      <p>Die Preise sind bewusst transparent. Fuer abweichende Umfaenge oder besondere Konstellationen sollte die finale Preisgestaltung vor Livegang verbindlich mit der Praxisorganisation abgestimmt werden.</p>
-    </div>
-    <div class="card-grid card-grid-three">
-      {% for service in services %}
-        <article class="service-card">
-          <p class="service-price">{{ service.price }}</p>
-          <h3>{{ service.title }}</h3>
-          <p>{{ service.subtitle }}</p>
-          <ul>
-            {% for bullet in service.bullets %}
-              <li>{{ bullet }}</li>
-            {% endfor %}
+  <section class="section-pale" id="preise">
+    <div class="container">
+      <div class="section-tag">Investition in deine Gesundheit</div>
+      <h2 class="section-title">Transparente<br><em>Preise</em></h2>
+      <p class="section-lead">Keine versteckten Kosten. Zahlung bar oder per &Uuml;berweisung.</p>
+      <div class="price-grid">
+        <div class="price-card">
+          <div class="price-label">Einzelbehandlung</div>
+          <div class="price-amount">{{ shell.practice.single_session_price_label }}</div>
+          <div class="price-duration">{{ shell.practice.appointment_duration_verbose }}</div>
+          <ul class="price-perks">
+            <li>Ausf&uuml;hrliches Erstgespr&auml;ch</li>
+            <li>Gantke&reg; Faszienbehandlung</li>
+            <li>Individuelle &Uuml;bungen</li>
+            <li>Rechnung f&uuml;r Versicherung</li>
           </ul>
-        </article>
-      {% endfor %}
+        </div>
+        <div class="price-card featured">
+          <div class="price-badge">Bestes Preis-Leistung</div>
+          <div class="price-label">{{ shell.practice.package_card_label }}</div>
+          <div class="price-amount">{{ shell.practice.package_session_price_label }}</div>
+          <div class="price-duration">{{ shell.practice.package_validity_label }}</div>
+          <ul class="price-perks">
+            <li>{{ shell.practice.package_savings_label }}</li>
+            <li>Flexibel &uuml;bertragbar</li>
+            <li>1 Jahr G&uuml;ltigkeit</li>
+            <li>Rechnung f&uuml;r Versicherung</li>
+          </ul>
+        </div>
+      </div>
+      <p class="price-note-text">Private Zusatzversicherungen erstatten h&auml;ufig einen Teil &ndash; bitte vorab bei deiner Versicherung anfragen.</p>
+      <div class="price-action"><a class="btn-primary" href="/terminbuchung">Jetzt Termin buchen</a></div>
     </div>
-  </div>
-</section>
+  </section>
 
-<section class="section">
-  <div class="container">
-    <div class="section-intro">
-      <p class="eyebrow">FAQ</p>
-      <h2>Hauefige Fragen vor der ersten Anfrage.</h2>
+  <section class="section-white" id="anfahrt">
+    <div class="container">
+      <div class="section-tag">Standort &amp; Anfahrt</div>
+      <h2 class="section-title">Praxis in<br><em>{{ shell.practice.address_line_2 }}</em></h2>
+      <p class="section-lead"><strong>Adresse:</strong> {{ shell.practice.address_line_1 }}, {{ shell.practice.address_line_2 }} &ndash; gut erreichbar in der Region {{ shell.practice.region_label }}. Kostenlose Parkpl&auml;tze direkt vor dem Haus.</p>
+      <div class="anfahrt-grid">
+        <a class="anfahrt-map-link" href="https://maps.google.com/?q={{ shell.practice.maps_query }}" target="_blank" rel="noopener noreferrer" aria-label="Route zur Praxis in Google Maps &ouml;ffnen">
+          <div class="map-icon">&#128506;</div>
+          <span>Route in Google Maps &ouml;ffnen</span>
+          <small>{{ shell.practice.address_line_1 }}, {{ shell.practice.address_line_2 }}</small>
+        </a>
+        <div class="anfahrt-details">
+          <div class="anfahrt-item"><div class="ai-icon">&#127359;</div><div><h3>Parken</h3><p>Kostenlose Parkpl&auml;tze direkt vor dem Haus &ndash; keine Parkplatzsuche.</p></div></div>
+          <div class="anfahrt-item"><div class="ai-icon">&#128663;</div><div><h3>Mit dem Auto</h3><p>Die Praxis ist bequem aus der Region {{ shell.practice.region_label }} erreichbar.</p></div></div>
+          <div class="anfahrt-item"><div class="ai-icon">&#127968;</div><div><h3>Hausbesuche</h3><p>In {{ shell.practice.house_call_area }} &ndash; + {{ shell.practice.house_call_fee_label }} Fahrtpauschale.</p></div></div>
+          <div class="anfahrt-item"><div class="ai-icon">&#128336;</div><div><h3>&Ouml;ffnungszeiten</h3><p>{{ shell.practice.opening_hours_weekdays }}<br>{{ shell.practice.opening_hours_saturday }}</p></div></div>
+        </div>
+      </div>
     </div>
-    <div class="faq-list">
-      {% for item in faqs %}
-        <details class="faq-item">
-          <summary>{{ item.question }}</summary>
-          <p>{{ item.answer }}</p>
-        </details>
-      {% endfor %}
+  </section>
+
+  <section class="section-pale" id="faq">
+    <div class="container">
+      <div class="section-tag">H&auml;ufige Fragen</div>
+      <h2 class="section-title">Deine Fragen &ndash;<br><em>meine Antworten</em></h2>
+      <div class="faq-list">
+        <details><summary>Was ist die Gantke&reg; Faszienbehandlung genau?</summary><div>Die Gantke&reg; Methode ist eine sanfte, manuelle Faszientherapie, entwickelt von Frank Gantke. Durch pr&auml;zise Grifftechniken werden Verklebungen und Fehlspannungen im Bindegewebe gel&ouml;st. Vollst&auml;ndig schmerzfrei, ca. 90 Minuten, ohne Ger&auml;te &ndash; ganzheitlich vom Fu&szlig; bis zum Kopf.</div></details>
+        <details><summary>F&uuml;r wen ist die Faszienbehandlung geeignet?</summary><div>F&uuml;r alle Altersgruppen. Besonders wirksam bei chronischen R&uuml;ckenschmerzen, Nackenverspannungen, Migr&auml;ne, Gelenkbeschwerden und nach Verletzungen.<br><br><strong>Nicht geeignet bei:</strong> akuten Entz&uuml;ndungen, Fieber, frischen Operationswunden oder Thrombosen.</div></details>
+        <details><summary>Ist die Behandlung schmerzhaft?</summary><div>In der Regel vollst&auml;ndig schmerzfrei. Du kannst ein angenehmes Ziehen oder Druckgef&uuml;hl sp&uuml;ren &ndash; viele empfinden die Sitzung als tief entspannend. Sollte etwas unangenehm sein, passe ich den Druck sofort an.</div></details>
+        <details><summary>Was sollte ich vor der Behandlung beachten?</summary><div>Bitte trinke ausreichend Wasser (mind. 1,5 Liter am Behandlungstag) und komme in bequemer Kleidung &ndash; Leggings oder lockere Hose mit T-Shirt. Schwere Mahlzeiten direkt vorher vermeiden.</div></details>
+        <details><summary>Wie viele Termine sind n&ouml;tig?</summary><div>Sehr individuell. Viele sp&uuml;ren nach der ersten Sitzung bereits Verbesserung. Bei chronischen Beschwerden empfehle ich 3&ndash;6 Behandlungen im Abstand von 1&ndash;3 Wochen.</div></details>
+        <details><summary>&Uuml;bernimmt die Krankenkasse die Kosten?</summary><div>Gesetzliche Krankenkassen &uuml;bernehmen die Kosten in der Regel nicht. Private Zusatzversicherungen erstatten h&auml;ufig einen Teil. Eine Rechnung stelle ich gerne aus.</div></details>
+        <details><summary>Wo findet die Behandlung statt &ndash; und wie komme ich hin?</summary><div><strong>Praxis:</strong> {{ shell.practice.address_line_1 }}, {{ shell.practice.address_line_2 }}. Kostenlose Parkpl&auml;tze direkt vor dem Haus und gute Erreichbarkeit in der Region {{ shell.practice.region_label }}.<br><br>Hausbesuche in {{ shell.practice.house_call_area }} nach Absprache &ndash; Fahrtpauschale + {{ shell.practice.house_call_fee_label }}.</div></details>
+        <details><summary>Was ist der Unterschied zur klassischen Massage?</summary><div>Klassische Massage behandelt prim&auml;r die Muskulatur. Die Gantke&reg; Methode zielt gezielt auf das fasziale Bindegewebsnetz und korrigiert strukturelle Fehlspannungen im gesamten K&ouml;rper &ndash; nicht nur lokal. Die Wirkung ist oft nachhaltiger und langfristiger.</div></details>
+      </div>
     </div>
-    <div class="center-actions">
-      <a class="button button-ghost" href="/faq">Alle Fragen ansehen</a>
+  </section>
+
+  <section class="cta-section" id="buchen">
+    <div class="cta-inner container">
+      <h2>Bereit, endlich<br><em>schmerzfrei</em> zu leben?</h2>
+      <p>Buche jetzt deinen Termin &ndash; schnell, einfach und unverbindlich online. Die ersten freien Termine werden oft schnell belegt.</p>
+      <a class="btn-cta-large" href="/terminbuchung">&#128197; Jetzt Termin buchen</a>
+      <p class="cta-micro">Kostenlose Erstberatung inklusive &middot; Keine Vorauszahlung</p>
+      <div class="cta-contact">
+        <span>&#128222; <a href="tel:{{ shell.practice.phone }}">{{ shell.practice.phone }}</a></span>
+        <span>&#9993; <a href="mailto:{{ shell.practice.email }}">{{ shell.practice.email }}</a></span>
+        <span>&#128205; {{ shell.practice.address_line_1 }}, {{ shell.practice.address_line_2 }}</span>
+      </div>
     </div>
+  </section>
+
+  <div class="hours-stripe">
+    <p><strong>&Ouml;ffnungszeiten:</strong> {{ shell.practice.opening_hours_summary }} &nbsp;|&nbsp; <a href="tel:{{ shell.practice.phone }}">{{ shell.practice.phone }}</a></p>
   </div>
-</section>
+</div>
 {% endblock %}

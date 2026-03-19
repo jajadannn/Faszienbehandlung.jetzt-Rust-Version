@@ -20,10 +20,10 @@ impl RegisterForm {
         let mut errors = Vec::new();
 
         if normalize_whitespace(&self.full_name).len() < 3 {
-            errors.push("Bitte geben Sie Ihren vollstaendigen Namen an.".to_string());
+            errors.push("Bitte geben Sie Ihren vollständigen Namen an.".to_string());
         }
         if !self.email.contains('@') {
-            errors.push("Bitte geben Sie eine gueltige E-Mail-Adresse an.".to_string());
+            errors.push("Bitte geben Sie eine gültige E-Mail-Adresse an.".to_string());
         }
         if normalize_phone(&self.phone_number).len() < 6 {
             errors.push("Bitte geben Sie eine Telefonnummer an.".to_string());
@@ -33,7 +33,7 @@ impl RegisterForm {
         }
         errors.extend(password_policy_errors(&self.password));
         if self.privacy_consent.is_none() {
-            errors.push("Bitte bestaetigen Sie die Datenschutzhinweise.".to_string());
+            errors.push("Bitte bestätigen Sie die Datenschutzhinweise.".to_string());
         }
 
         errors
@@ -60,7 +60,7 @@ impl LoginForm {
     pub fn validate(&self) -> Vec<String> {
         let mut errors = Vec::new();
         if !self.email.contains('@') {
-            errors.push("Bitte geben Sie eine gueltige E-Mail-Adresse ein.".to_string());
+            errors.push("Bitte geben Sie eine gültige E-Mail-Adresse ein.".to_string());
         }
         if self.password.trim().is_empty() {
             errors.push("Bitte geben Sie Ihr Passwort ein.".to_string());
@@ -91,10 +91,10 @@ impl BookingForm {
         let mut errors = Vec::new();
 
         if normalize_whitespace(&self.full_name).len() < 3 {
-            errors.push("Bitte geben Sie Ihren vollstaendigen Namen an.".to_string());
+            errors.push("Bitte geben Sie Ihren vollständigen Namen an.".to_string());
         }
         if !self.email.contains('@') {
-            errors.push("Bitte geben Sie eine gueltige E-Mail-Adresse an.".to_string());
+            errors.push("Bitte geben Sie eine gültige E-Mail-Adresse an.".to_string());
         }
         if normalize_phone(&self.phone_number).len() < 6 {
             errors.push("Bitte geben Sie eine Telefonnummer an.".to_string());
@@ -103,10 +103,10 @@ impl BookingForm {
             errors.push("Bitte geben Sie einen Wohnort an.".to_string());
         }
         if self.desired_at.trim().is_empty() {
-            errors.push("Bitte waehlen Sie einen Wunschtermin aus.".to_string());
+            errors.push("Bitte wählen Sie einen Wunschtermin aus.".to_string());
         }
         if self.privacy_consent.is_none() {
-            errors.push("Bitte bestaetigen Sie die Datenschutzhinweise.".to_string());
+            errors.push("Bitte bestätigen Sie die Datenschutzhinweise.".to_string());
         }
         if requires_password {
             match &self.password {
@@ -114,7 +114,7 @@ impl BookingForm {
                     errors.extend(password_policy_errors(password));
                 }
                 _ => errors.push(
-                    "Fuer die sichere Terminbuchung benoetigen wir ein Passwort fuer Ihr Kundenkonto."
+                    "Für die sichere Terminbuchung benötigen wir ein Passwort für Ihr Kundenkonto."
                         .to_string(),
                 ),
             }
@@ -141,10 +141,10 @@ impl AdminAppointmentForm {
     pub fn validate(&self) -> Vec<String> {
         let mut errors = Vec::new();
         if self.desired_at.trim().is_empty() {
-            errors.push("Bitte waehlen Sie Datum und Uhrzeit.".to_string());
+            errors.push("Bitte wählen Sie Datum und Uhrzeit.".to_string());
         }
         if self.status.trim().is_empty() {
-            errors.push("Bitte waehlen Sie einen Terminstatus.".to_string());
+            errors.push("Bitte wählen Sie einen Terminstatus.".to_string());
         }
         if self.total_amount_eur.trim().is_empty() {
             errors.push("Bitte geben Sie einen Gesamtbetrag ein.".to_string());
@@ -185,7 +185,7 @@ pub struct AdminNoteForm {
 impl AdminNoteForm {
     pub fn validate(&self) -> Vec<String> {
         if normalize_whitespace(&self.note).len() < 4 {
-            vec!["Bitte erfassen Sie eine aussagekraeftige interne Notiz.".to_string()]
+            vec!["Bitte erfassen Sie eine aussagekräftige interne Notiz.".to_string()]
         } else {
             Vec::new()
         }

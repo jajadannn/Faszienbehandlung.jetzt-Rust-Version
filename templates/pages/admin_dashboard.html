@@ -4,8 +4,8 @@
 <section class="page-hero">
   <div class="container narrow">
     <p class="eyebrow">Admin / Kundenverwaltung</p>
-    <h1>Kunden, Buchungen und offene Betraege professionell im Blick.</h1>
-    <p class="lead">Angemeldet als {{ admin_name }}. Der Bereich ist ausschliesslich fuer Administratoren gedacht und trennt Suchfunktion, Kennzahlen und Kundenprofile klar voneinander.</p>
+    <h1>Kunden, Buchungen und offene Beträge professionell im Blick.</h1>
+    <p class="lead">Angemeldet als {{ admin_name }}. Der Bereich ist ausschließlich für Administratoren gedacht und trennt Suchfunktion, Kennzahlen und Kundenprofile klar voneinander.</p>
   </div>
 </section>
 
@@ -16,7 +16,7 @@
       <p class="big-metric">{{ metrics.active_customers }}</p>
     </article>
     <article class="content-card card--sky">
-      <h2>Zukuenftige Termine</h2>
+      <h2>Zukünftige Termine</h2>
       <p class="big-metric">{{ metrics.future_appointments }}</p>
     </article>
     <article class="content-card card--plum">
@@ -40,7 +40,7 @@
         <option value="inaktiv" {% if filter.status == "inaktiv" %}selected{% endif %}>Inaktiv</option>
       </select>
       <select name="verified">
-        <option value="">E-Mail bestaetigt</option>
+        <option value="">E-Mail bestätigt</option>
         <option value="ja" {% if filter.verified == "ja" %}selected{% endif %}>Ja</option>
         <option value="nein" {% if filter.verified == "nein" %}selected{% endif %}>Nein</option>
       </select>
@@ -59,9 +59,9 @@
             <th>Kunde</th>
             <th>Kontakt</th>
             <th>Ort</th>
-            <th>E-Mail bestaetigt</th>
+            <th>E-Mail bestätigt</th>
             <th>Buchungen</th>
-            <th>Naechster Termin</th>
+            <th>Nächster Termin</th>
             <th>Offen</th>
             <th></th>
           </tr>
@@ -69,7 +69,7 @@
         <tbody>
           {% if customers.is_empty() %}
             <tr>
-              <td colspan="8">Keine Kunden fuer diese Suche gefunden.</td>
+              <td colspan="8">Keine Kunden für diese Suche gefunden.</td>
             </tr>
           {% else %}
             {% for customer in customers %}

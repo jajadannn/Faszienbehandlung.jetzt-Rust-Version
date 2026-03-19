@@ -17,7 +17,7 @@ pub fn format_date(datetime: &NaiveDateTime) -> String {
 
 pub fn parse_datetime_local(input: &str) -> AppResult<NaiveDateTime> {
     NaiveDateTime::parse_from_str(input, "%Y-%m-%dT%H:%M")
-        .with_context(|| format!("Ungueltiges Datum/Zeit-Format: {}", input))
+        .with_context(|| format!("Ungültiges Datum/Zeit-Format: {}", input))
         .map_err(AppError::from)
 }
 
@@ -45,7 +45,7 @@ pub fn format_cents(cents: i64) -> String {
 pub fn parse_euro_to_cents(input: &str) -> AppResult<i64> {
     let cleaned = input.trim().replace('.', "").replace(',', ".");
     let value: f64 = cleaned.parse().map_err(|_| {
-        AppError::BadRequest("Bitte geben Sie einen gueltigen Geldbetrag ein.".to_string())
+        AppError::BadRequest("Bitte geben Sie einen gültigen Geldbetrag ein.".to_string())
     })?;
 
     Ok((value * 100.0).round() as i64)
@@ -73,7 +73,7 @@ pub fn password_policy_errors(password: &str) -> Vec<String> {
         errors.push("Das Passwort muss mindestens 12 Zeichen enthalten.".to_string());
     }
     if !password.chars().any(|c| c.is_ascii_uppercase()) {
-        errors.push("Das Passwort muss mindestens einen Grossbuchstaben enthalten.".to_string());
+        errors.push("Das Passwort muss mindestens einen Großbuchstaben enthalten.".to_string());
     }
     if !password.chars().any(|c| c.is_ascii_lowercase()) {
         errors.push("Das Passwort muss mindestens einen Kleinbuchstaben enthalten.".to_string());
@@ -89,9 +89,9 @@ pub fn password_policy_errors(password: &str) -> Vec<String> {
 
 pub fn appointment_status_label(status: &str) -> &'static str {
     match status {
-        "wartet_auf_email" => "Wartet auf E-Mail-Bestaetigung",
+        "wartet_auf_email" => "Wartet auf E-Mail-Bestätigung",
         "angefragt" => "Angefragt",
-        "bestaetigt" => "Bestaetigt",
+        "bestaetigt" => "Bestätigt",
         "abgeschlossen" => "Abgeschlossen",
         "storniert" => "Storniert",
         _ => "Unbekannt",

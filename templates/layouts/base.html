@@ -12,7 +12,7 @@
   <meta property="og:url" content="{{ shell.meta.og_url }}">
   <meta property="og:image" content="{{ shell.meta.og_image }}">
   <meta name="theme-color" content="#70AECD">
-  <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
   <link rel="stylesheet" href="/static/css/site.css">
   <script defer src="/static/js/site.js"></script>
 </head>
@@ -21,52 +21,64 @@
     <header class="site-header">
       <div class="container nav-wrap">
         <a href="/" class="brand">
-          <span class="brand-mark">fj</span>
+          <img
+            src="/static/Logo-256.v2.png"
+            alt="Logo von faszienbehandlung.jetzt"
+            class="brand-logo"
+          >
           <span class="brand-copy">
             <strong>faszienbehandlung.jetzt</strong>
-            <span>ruhige Praxiswebseite mit klarer Terminfuehrung</span>
+            <span>ruhige Praxis für Faszienbehandlung</span>
           </span>
         </a>
-        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">Menue</button>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">Menü</button>
         <nav class="site-nav" id="site-nav">
-          <a href="/praxis">Praxis</a>
-          <a href="/faszienbehandlung">Faszienbehandlung</a>
-          <a href="/leistungen-preise">Leistungen</a>
-          <a href="/faq">FAQ</a>
-          <a href="/kontakt">Kontakt</a>
-          <a class="button button-secondary button-small" href="/terminbuchung">Termin buchen</a>
-          {% if let Some(user) = shell.current_user %}
-            {% if user.role == "admin" %}
-              <a class="button button-ghost button-small" href="/admin">Admin</a>
+          <div class="site-nav-links">
+            <a href="/praxis">Praxis</a>
+            <a href="/faszienbehandlung">Faszienbehandlung</a>
+            <a href="/leistungen-preise">Leistungen</a>
+            <a href="/faq">FAQ</a>
+            <a href="/kontakt">Kontakt</a>
+          </div>
+          <div class="site-nav-actions">
+            <a class="button button-primary button-small" href="/terminbuchung">Termin buchen</a>
+            {% if let Some(user) = shell.current_user %}
+              {% if user.role == "admin" %}
+                <a class="button button-ghost button-small" href="/admin">Admin</a>
+              {% else %}
+                <a class="button button-ghost button-small" href="/konto">Konto</a>
+              {% endif %}
+              <form method="post" action="/logout" class="logout-form">
+                <input type="hidden" name="csrf_token" value="{{ shell.csrf_token }}">
+                <button type="submit" class="nav-link-button">Abmelden</button>
+              </form>
             {% else %}
-              <a class="button button-ghost button-small" href="/konto">Konto</a>
+              <a href="/anmeldung">Login</a>
+              <a class="button button-ghost button-small" href="/registrierung">Registrieren</a>
             {% endif %}
-            <form method="post" action="/logout" class="logout-form">
-              <input type="hidden" name="csrf_token" value="{{ shell.csrf_token }}">
-              <button type="submit" class="nav-link-button">Abmelden</button>
-            </form>
-          {% else %}
-            <a href="/anmeldung">Login</a>
-            <a class="button button-ghost button-small" href="/registrierung">Registrieren</a>
-          {% endif %}
+          </div>
         </nav>
       </div>
     </header>
 
-    <main>
+    <main id="main-content">
       {% block content %}{% endblock %}
     </main>
 
     <footer class="site-footer">
       <div class="container footer-grid">
-        <section>
-          <p class="eyebrow">Praxis</p>
-          <h2>{{ shell.practice.name }}</h2>
+        <section class="footer-col footer-col-brand">
+          <img
+            src="/static/Logo-256.v2.png"
+            alt="Logo von faszienbehandlung.jetzt"
+            class="footer-logo"
+          >
+          <p class="footer-copy">Professionelle Praxiswebseite für Faszienbehandlung mit ruhiger Nutzerführung, klarer Terminlogik und datenschutzbewusster Struktur.</p>
           <p>{{ shell.practice.address_line_1 }}<br>{{ shell.practice.address_line_2 }}</p>
           <p><a href="tel:{{ shell.practice.phone }}">{{ shell.practice.phone }}</a><br><a href="mailto:{{ shell.practice.email }}">{{ shell.practice.email }}</a></p>
         </section>
-        <section>
-          <p class="eyebrow">Schnellzugriff</p>
+        <section class="footer-col">
+          <h2 class="footer-title">Schnellzugriff</h2>
           <ul class="footer-list">
             <li><a href="/terminbuchung">Terminbuchung</a></li>
             <li><a href="/leistungen-preise">Leistungen & Preise</a></li>
@@ -74,8 +86,8 @@
             <li><a href="/kontakt">Kontakt</a></li>
           </ul>
         </section>
-        <section>
-          <p class="eyebrow">Rechtliches</p>
+        <section class="footer-col">
+          <h2 class="footer-title">Rechtliches</h2>
           <ul class="footer-list">
             <li><a href="/impressum">Impressum</a></li>
             <li><a href="/datenschutz">Datenschutz</a></li>
@@ -84,7 +96,11 @@
         </section>
       </div>
       <div class="container footer-bottom">
-        <p>&copy; {{ shell.year }} {{ shell.practice.name }}. Die Rechtstexte auf dieser Demo-Basis muessen vor dem Livegang fachlich geprueft werden.</p>
+        <p>&copy; {{ shell.year }} {{ shell.practice.name }}. Die Rechtstexte auf dieser Demo-Basis müssen vor dem Livegang fachlich geprüft werden.</p>
+        <div class="footer-links">
+          <a href="/impressum">Impressum</a>
+          <a href="/datenschutz">Datenschutz</a>
+        </div>
       </div>
     </footer>
   </div>

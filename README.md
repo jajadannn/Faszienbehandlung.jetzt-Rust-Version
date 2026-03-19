@@ -90,6 +90,29 @@ cargo run -- seed-demo
 
 Danach ist die App standardmaessig unter `http://127.0.0.1:3000` erreichbar.
 
+Wichtig: Aenderungen an `.env` werden erst nach einem Neustart von `cargo run` sichtbar, weil die Konfiguration beim Start geladen wird.
+
+## Wichtige Praxiswerte in `.env`
+
+Diese Werte steuern die sichtbaren Praxisdaten und zentrale Inhalte der Startseite:
+
+- `PRACTICE_NAME`
+- `PRACTITIONER_NAME`
+- `PRACTICE_EMAIL`
+- `PRACTICE_PHONE`
+- `PRACTICE_ADDRESS_LINE_1`
+- `PRACTICE_ADDRESS_LINE_2`
+- `PRACTICE_REGION_LABEL`
+- `PRACTICE_HOUSE_CALL_AREA`
+- `OPENING_HOURS_WEEKDAYS`
+- `OPENING_HOURS_SATURDAY`
+- `APPOINTMENT_DURATION_MINUTES`
+- `BOOKING_BASE_PRICE_CENTS`
+- `BOOKING_PACKAGE_SESSION_PRICE_CENTS`
+- `BOOKING_PACKAGE_SESSION_COUNT`
+- `BOOKING_PACKAGE_VALIDITY_MONTHS`
+- `HOUSE_CALL_FEE_CENTS`
+
 ## Demo-Zugaenge nach `seed-demo`
 
 - Admin: `admin@faszienbehandlung.jetzt`

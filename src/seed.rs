@@ -7,7 +7,7 @@ pub async fn seed_demo(state: &AppState) -> AppResult<()> {
         .fetch_optional(&state.pool)
         .await?;
     if existing.is_some() {
-        tracing::info!("Seed uebersprungen, da bereits Daten vorhanden sind.");
+        tracing::info!("Seed übersprungen, da bereits Daten vorhanden sind.");
         return Ok(());
     }
 
@@ -152,7 +152,7 @@ pub async fn seed_demo(state: &AppState) -> AppResult<()> {
     )
     .bind(anna_payment_id)
     .bind(4500_i64)
-    .bind("Anzahlung bei Online-Bestaetigung.")
+    .bind("Anzahlung bei Online-Bestätigung.")
     .bind(now)
     .execute(&mut *tx)
     .await?;
@@ -161,7 +161,7 @@ pub async fn seed_demo(state: &AppState) -> AppResult<()> {
         "INSERT INTO admin_notes (customer_id, admin_user_id, note, created_at) VALUES (?, 1, ?, ?)",
     )
     .bind(anna_customer_id)
-    .bind("Kundin wuenscht bevorzugt Termine am spaeten Nachmittag.")
+    .bind("Kundin wünscht bevorzugt Termine am späten Nachmittag.")
     .bind(now)
     .execute(&mut *tx)
     .await?;

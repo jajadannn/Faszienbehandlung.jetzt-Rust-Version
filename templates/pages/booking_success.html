@@ -5,7 +5,7 @@
   <div class="container narrow">
     <p class="eyebrow">Terminwunsch eingegangen</p>
     <h1>Vielen Dank, {{ customer_name }}.</h1>
-    <p class="lead">Ihr gewuenschter Termin am {{ desired_at_label }} wurde gespeichert.</p>
+    <p class="lead">Ihr gewünschter Termin am {{ desired_at_label }} wurde für die Praxis in {{ shell.practice.address_line_2 }} gespeichert.</p>
   </div>
 </section>
 
@@ -17,13 +17,13 @@
         <p>Die Anfrage ist dem neuen Konto unter <strong>{{ customer_email }}</strong> zugeordnet.</p>
       {% else %}
         <h2>Ihre Anfrage wurde in Ihrem Kundenkonto hinterlegt</h2>
-        <p>Sie sehen den Eintrag nach dem Login im geschuetzten Bereich wieder.</p>
+        <p>Sie sehen den Eintrag nach dem Login im geschützten Bereich wieder.</p>
       {% endif %}
 
       {% if needs_verification %}
-        <p>Bitte bestaetigen Sie jetzt zunaechst Ihre E-Mail-Adresse. Erst danach wird die Terminanfrage verbindlich weiterbearbeitet.</p>
+        <p>Bitte bestätigen Sie jetzt zunächst Ihre E-Mail-Adresse. Erst danach wird die Terminanfrage verbindlich weiterbearbeitet.</p>
       {% else %}
-        <p>Die Praxis kann Ihre Anfrage nun intern pruefen und den Status im System aktualisieren.</p>
+        <p>Die Praxis kann Ihre Anfrage nun intern prüfen und den Status im System aktualisieren.</p>
       {% endif %}
 
       <div class="hero-actions">
@@ -35,6 +35,15 @@
         <a class="button button-secondary" href="/">Zur Startseite</a>
       </div>
     </article>
+  </div>
+</section>
+
+<section class="section section-pale">
+  <div class="container narrow">
+    <div class="quick-answer">
+      <strong>Nächster Schritt</strong>
+      <p>Bei Rückfragen erreichst du die Praxis unter <a href="mailto:{{ shell.practice.email }}">{{ shell.practice.email }}</a> oder telefonisch unter <a href="tel:{{ shell.practice.phone }}">{{ shell.practice.phone }}</a>. Die organisatorische Rückmeldung erfolgt über dein Kundenkonto und per E-Mail.</p>
+    </div>
   </div>
 </section>
 {% endblock %}

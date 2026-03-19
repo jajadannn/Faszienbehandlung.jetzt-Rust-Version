@@ -23,6 +23,7 @@ use crate::{
     models::AuthenticatedUser,
     seo::SeoMeta,
     state::AppState,
+    utils::format_cents,
     views::{PageShell, PracticeView},
 };
 
@@ -82,22 +83,74 @@ pub async fn build_shell(
 ) -> AppResult<(CookieJar, PageShell, Option<AuthenticatedUser>)> {
     let current_user = auth_helpers::load_current_user(state, &jar).await?;
     let (jar, csrf_token) = auth_helpers::ensure_csrf_cookie(state, jar);
+    let config = &state.config;
+
+    let package_savings_cents = (config.booking_base_price_cents
+        - config.booking_package_session_price_cents)
+        * config.booking_package_session_count;
+    let package_savings_label = if package_savings_cents > 0 {
+        format!("Spare {} gesamt", euro_symbol_label(package_savings_cents))
+    } else {
+        "Preisvorteil für wiederkehrende Termine individuell konfigurierbar".to_string()
+    };
 
     let shell = PageShell {
-        meta: SeoMeta::new(&state.config, path, title, description),
+        meta: SeoMeta::new(config, path, title, description),
         current_user: current_user.as_ref().map(Into::into),
         csrf_token,
         year: Utc::now().year(),
         practice: PracticeView {
-            name: state.config.practice_name.clone(),
-            email: state.config.practice_email.clone(),
-            phone: state.config.practice_phone.clone(),
-            address_line_1: state.config.practice_address_line_1.clone(),
-            address_line_2: state.config.practice_address_line_2.clone(),
+            name: config.practice_name.clone(),
+            practitioner_name: config.practitioner_name.clone(),
+            email: config.practice_email.clone(),
+            phone: config.practice_phone.clone(),
+            address_line_1: config.practice_address_line_1.clone(),
+            address_line_2: config.practice_address_line_2.clone(),
+            region_label: config.practice_region_label.clone(),
+            house_call_area: config.practice_house_call_area.clone(),
+            opening_hours_weekdays: config.opening_hours_weekdays.clone(),
+            opening_hours_saturday: config.opening_hours_saturday.clone(),
+            opening_hours_summary: format!(
+                "{} · {}",
+                config.opening_hours_weekdays, config.opening_hours_saturday
+            ),
+            appointment_duration_short: format!("{} Min.", config.appointment_duration_minutes),
+            appointment_duration_verbose: format!("ca. {} Minuten", config.appointment_duration_minutes),
+            single_session_price_label: euro_symbol_label(config.booking_base_price_cents),
+            single_session_price_input: plain_euro_value(config.booking_base_price_cents),
+            package_session_price_label: euro_symbol_label(config.booking_package_session_price_cents),
+            package_session_price_input: plain_euro_value(config.booking_package_session_price_cents),
+            package_card_label: format!(
+                "{}er-Karte · pro Sitzung",
+                config.booking_package_session_count
+            ),
+            package_validity_label: format!(
+                "Übertragbar · {} Monate gültig",
+                config.booking_package_validity_months
+            ),
+            package_savings_label,
+            house_call_fee_label: euro_symbol_label(config.house_call_fee_cents),
+            house_call_fee_input: plain_euro_value(config.house_call_fee_cents),
+            maps_query: maps_query(
+                &config.practice_address_line_1,
+                &config.practice_address_line_2,
+            ),
         },
     };
 
     Ok((jar, shell, current_user))
+}
+
+fn euro_symbol_label(cents: i64) -> String {
+    format_cents(cents).replace(" EUR", " €")
+}
+
+fn plain_euro_value(cents: i64) -> String {
+    format_cents(cents).replace(" EUR", "")
+}
+
+fn maps_query(address_line_1: &str, address_line_2: &str) -> String {
+    format!("{address_line_1}, {address_line_2}").replace(' ', "+")
 }
 
 pub fn render<T: Template>(jar: CookieJar, template: &T) -> AppResult<Response> {

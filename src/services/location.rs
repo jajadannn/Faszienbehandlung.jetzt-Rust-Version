@@ -75,7 +75,7 @@ impl LocationService {
             .await
             .map_err(|_| {
                 AppError::BadRequest(
-                    "Die Ortspruefung ist momentan nicht erreichbar. Bitte versuchen Sie es spaeter erneut."
+                    "Die Ortsprüfung ist momentan nicht erreichbar. Bitte versuchen Sie es später erneut."
                         .to_string(),
                 )
             })?;
@@ -85,7 +85,7 @@ impl LocationService {
             .await
             .map_err(|_| {
                 AppError::BadRequest(
-                    "Die Ortspruefung konnte nicht ausgewertet werden. Bitte versuchen Sie es spaeter erneut."
+                    "Die Ortsprüfung konnte nicht ausgewertet werden. Bitte versuchen Sie es später erneut."
                         .to_string(),
                 )
             })?;

@@ -24,8 +24,8 @@ pub async fn show_register(State(state): State<AppState>, jar: CookieJar) -> App
         &state,
         jar,
         "/registrierung",
-        "Registrierung | Kundenkonto fuer Faszienbehandlung",
-        "Sichere Registrierung mit Passwort-Hashing, Datenschutz-Zustimmung und Ortsvalidierung fuer www.faszienbehandlung.jetzt.",
+        "Registrierung | Kundenkonto für Faszienbehandlung",
+        "Sichere Registrierung mit Passwort-Hashing, Datenschutz-Zustimmung und Ortsvalidierung für www.faszienbehandlung.jetzt.",
     )
     .await?;
 
@@ -70,8 +70,8 @@ pub async fn register(
         &state,
         jar,
         "/registrierung",
-        "Registrierung | Kundenkonto fuer Faszienbehandlung",
-        "Sichere Registrierung mit Passwort-Hashing, Datenschutz-Zustimmung und Ortsvalidierung fuer www.faszienbehandlung.jetzt.",
+        "Registrierung | Kundenkonto für Faszienbehandlung",
+        "Sichere Registrierung mit Passwort-Hashing, Datenschutz-Zustimmung und Ortsvalidierung für www.faszienbehandlung.jetzt.",
     )
     .await?;
 
@@ -133,7 +133,7 @@ pub async fn register(
         flash: Some(FlashMessage {
             kind: "success".to_string(),
             title: "Registrierung abgeschlossen".to_string(),
-            text: "Ihr Kundenkonto wurde angelegt. Bitte bestaetigen Sie jetzt Ihre E-Mail-Adresse, damit Sie Termine buchen koennen.".to_string(),
+            text: "Ihr Kundenkonto wurde angelegt. Bitte bestätigen Sie jetzt Ihre E-Mail-Adresse, damit Sie Termine buchen können.".to_string(),
         }),
     };
 
@@ -146,7 +146,7 @@ pub async fn show_login(State(state): State<AppState>, jar: CookieJar) -> AppRes
         jar,
         "/anmeldung",
         "Anmeldung | Kundenkonto & Admin-Login",
-        "Sicherer Login fuer Kundenkonto und Admin-Bereich auf www.faszienbehandlung.jetzt.",
+        "Sicherer Login für Kundenkonto und Admin-Bereich auf www.faszienbehandlung.jetzt.",
     )
     .await?;
 
@@ -192,7 +192,7 @@ pub async fn login(
         jar,
         "/anmeldung",
         "Anmeldung | Kundenkonto & Admin-Login",
-        "Sicherer Login fuer Kundenkonto und Admin-Bereich auf www.faszienbehandlung.jetzt.",
+        "Sicherer Login für Kundenkonto und Admin-Bereich auf www.faszienbehandlung.jetzt.",
     )
     .await?;
 
@@ -251,8 +251,8 @@ pub async fn verify_email(
         &state,
         jar,
         "/verify-email",
-        "E-Mail bestaetigen | faszienbehandlung.jetzt",
-        "Bestaetigung der E-Mail-Adresse fuer das Kundenkonto und die sichere Terminbuchung.",
+        "E-Mail bestätigen | faszienbehandlung.jetzt",
+        "Bestätigung der E-Mail-Adresse für das Kundenkonto und die sichere Terminbuchung.",
     )
     .await?;
 

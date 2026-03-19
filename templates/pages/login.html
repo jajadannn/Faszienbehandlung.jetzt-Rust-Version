@@ -4,8 +4,8 @@
 <section class="page-hero">
   <div class="container narrow">
     <p class="eyebrow">Anmeldung</p>
-    <h1>Login fuer Kundenkonto und Admin-Bereich.</h1>
-    <p class="lead">Die Anmeldung nutzt serverseitige Sessions, sichere Cookies und eine klare Rollentrennung zwischen Kunden- und Verwaltungsbereich.</p>
+    <h1>Login für Kundenkonto und Admin-Bereich.</h1>
+    <p class="lead">Die Anmeldung nutzt serverseitige Sessions, sichere Cookies und eine klare Rollentrennung für die Praxis in {{ shell.practice.address_line_2 }}.</p>
   </div>
 </section>
 
@@ -20,7 +20,7 @@
       {% endif %}
       {% if !errors.is_empty() %}
         <div class="flash flash-error">
-          <strong>Anmeldung nicht moeglich.</strong>
+          <strong>Anmeldung nicht möglich.</strong>
           <ul>
             {% for error in errors %}
               <li>{{ error }}</li>
@@ -42,8 +42,10 @@
       </form>
     </div>
     <aside class="info-panel">
-      <h2>Noch kein Konto?</h2>
-      <p>Fuer die Online-Terminbuchung ist ein geschuetztes Kundenkonto vorgesehen. So bleiben Buchungen, Zahlungsstatus und E-Mail-Bestaetigungen sauber zugeordnet.</p>
+      <p class="card-kicker">Noch kein Konto?</p>
+      <h2>Die Buchung bleibt damit sauber zugeordnet</h2>
+      <p>Für die Online-Terminbuchung ist ein geschütztes Kundenkonto vorgesehen. So bleiben Buchungen, Zahlungsstatus und E-Mail-Bestätigungen für {{ shell.practice.practitioner_name }} strukturiert nachvollziehbar.</p>
+      <p>{{ shell.practice.single_session_price_label }} · {{ shell.practice.appointment_duration_short }}</p>
       <a class="button button-secondary" href="/registrierung">Jetzt registrieren</a>
     </aside>
   </div>

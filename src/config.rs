@@ -13,11 +13,21 @@ pub struct AppConfig {
     pub session_cookie_secure: bool,
     pub session_ttl_hours: i64,
     pub practice_name: String,
+    pub practitioner_name: String,
     pub practice_email: String,
     pub practice_phone: String,
     pub practice_address_line_1: String,
     pub practice_address_line_2: String,
+    pub practice_region_label: String,
+    pub practice_house_call_area: String,
+    pub opening_hours_weekdays: String,
+    pub opening_hours_saturday: String,
+    pub appointment_duration_minutes: i64,
     pub booking_base_price_cents: i64,
+    pub booking_package_session_price_cents: i64,
+    pub booking_package_session_count: i64,
+    pub booking_package_validity_months: i64,
+    pub house_call_fee_cents: i64,
     pub geocoding_user_agent: String,
     pub smtp_host: Option<String>,
     pub smtp_port: u16,
@@ -51,19 +61,50 @@ impl AppConfig {
             .parse()
             .context("SESSION_TTL_HOURS muss eine Zahl sein")?;
         let practice_name = env::var("PRACTICE_NAME")
-            .unwrap_or_else(|_| "Praxis fuer Faszienbehandlung Jetzt".to_string());
+            .unwrap_or_else(|_| "Praxis für Faszienbehandlung Jetzt".to_string());
+        let practitioner_name =
+            env::var("PRACTITIONER_NAME").unwrap_or_else(|_| practice_name.clone());
         let practice_email = env::var("PRACTICE_EMAIL")
             .unwrap_or_else(|_| "kontakt@faszienbehandlung.jetzt".to_string());
         let practice_phone =
             env::var("PRACTICE_PHONE").unwrap_or_else(|_| "+49 30 0000 0000".to_string());
         let practice_address_line_1 =
-            env::var("PRACTICE_ADDRESS_LINE_1").unwrap_or_else(|_| "Musterstrasse 12".to_string());
+            env::var("PRACTICE_ADDRESS_LINE_1").unwrap_or_else(|_| "Musterstraße 12".to_string());
         let practice_address_line_2 =
             env::var("PRACTICE_ADDRESS_LINE_2").unwrap_or_else(|_| "10115 Berlin".to_string());
-        let booking_base_price_cents = env::var("BOOKING_BASE_PRICE_CENTS")
+        let practice_region_label = env::var("PRACTICE_REGION_LABEL")
+            .unwrap_or_else(|_| practice_address_line_2.clone());
+        let practice_house_call_area = env::var("PRACTICE_HOUSE_CALL_AREA")
+            .unwrap_or_else(|_| practice_region_label.clone());
+        let opening_hours_weekdays = env::var("OPENING_HOURS_WEEKDAYS")
+            .unwrap_or_else(|_| "Mo-Fr 16:00-22:00 Uhr".to_string());
+        let opening_hours_saturday = env::var("OPENING_HOURS_SATURDAY")
+            .unwrap_or_else(|_| "Sa 09:00-19:00 Uhr".to_string());
+        let appointment_duration_minutes: i64 = env::var("APPOINTMENT_DURATION_MINUTES")
+            .unwrap_or_else(|_| "90".to_string())
+            .parse()
+            .context("APPOINTMENT_DURATION_MINUTES muss eine Zahl sein")?;
+        let booking_base_price_cents: i64 = env::var("BOOKING_BASE_PRICE_CENTS")
             .unwrap_or_else(|_| "8900".to_string())
             .parse()
             .context("BOOKING_BASE_PRICE_CENTS muss eine Zahl sein")?;
+        let booking_package_session_price_cents: i64 =
+            env::var("BOOKING_PACKAGE_SESSION_PRICE_CENTS")
+            .unwrap_or_else(|_| booking_base_price_cents.to_string())
+            .parse()
+            .context("BOOKING_PACKAGE_SESSION_PRICE_CENTS muss eine Zahl sein")?;
+        let booking_package_session_count: i64 = env::var("BOOKING_PACKAGE_SESSION_COUNT")
+            .unwrap_or_else(|_| "10".to_string())
+            .parse()
+            .context("BOOKING_PACKAGE_SESSION_COUNT muss eine Zahl sein")?;
+        let booking_package_validity_months: i64 = env::var("BOOKING_PACKAGE_VALIDITY_MONTHS")
+            .unwrap_or_else(|_| "12".to_string())
+            .parse()
+            .context("BOOKING_PACKAGE_VALIDITY_MONTHS muss eine Zahl sein")?;
+        let house_call_fee_cents: i64 = env::var("HOUSE_CALL_FEE_CENTS")
+            .unwrap_or_else(|_| "1000".to_string())
+            .parse()
+            .context("HOUSE_CALL_FEE_CENTS muss eine Zahl sein")?;
         let geocoding_user_agent = env::var("GEOCODING_USER_AGENT").unwrap_or_else(|_| {
             "faszienbehandlung-jetzt/1.0 (kontakt@faszienbehandlung.jetzt)".to_string()
         });
@@ -91,11 +132,21 @@ impl AppConfig {
             session_cookie_secure,
             session_ttl_hours,
             practice_name,
+            practitioner_name,
             practice_email,
             practice_phone,
             practice_address_line_1,
             practice_address_line_2,
+            practice_region_label,
+            practice_house_call_area,
+            opening_hours_weekdays,
+            opening_hours_saturday,
+            appointment_duration_minutes,
             booking_base_price_cents,
+            booking_package_session_price_cents,
+            booking_package_session_count,
+            booking_package_validity_months,
+            house_call_fee_cents,
             geocoding_user_agent,
             smtp_host,
             smtp_port,

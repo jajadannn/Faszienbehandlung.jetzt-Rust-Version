@@ -6,7 +6,7 @@ use crate::{
     content,
     error::AppResult,
     state::AppState,
-    views::{FaqItemView, InfoCard, PageShell, ServiceCardView, StatCard},
+    views::{FaqItemView, PageShell, ServiceCardView},
 };
 
 use super::{build_shell, render};
@@ -16,19 +16,13 @@ pub async fn home(State(state): State<AppState>, jar: CookieJar) -> AppResult<Re
         &state,
         jar,
         "/",
-        "Faszienbehandlung in ruhiger Praxisatmosphaere | faszienbehandlung.jetzt",
-        "Professionelle Faszienbehandlung mit klarer Nutzerfuehrung, transparenter Preisstruktur und sicherem Online-Buchungssystem auf www.faszienbehandlung.jetzt.",
+        "Faszienbehandlung in ruhiger Praxisatmosphäre | faszienbehandlung.jetzt",
+        "Professionelle Faszienbehandlung mit klarer Nutzerführung, transparenter Preisstruktur und sicherem Online-Buchungssystem auf www.faszienbehandlung.jetzt.",
     )
     .await?;
 
     let template = HomeTemplate {
         shell,
-        stats: content::home_stats(),
-        complaints: content::complaint_cards(),
-        benefits: content::benefit_cards(),
-        trust: content::trust_cards(),
-        services: content::service_cards(),
-        faqs: content::faq_items().into_iter().take(4).collect(),
     };
 
     render(jar, &template)
@@ -39,7 +33,7 @@ pub async fn about(State(state): State<AppState>, jar: CookieJar) -> AppResult<R
         &state,
         jar,
         "/praxis",
-        "Praxis fuer Faszienbehandlung | Ueber uns",
+        "Praxis für Faszienbehandlung | Über uns",
         "Einblick in Haltung, Ablauf und Praxisumfeld der Faszienbehandlung auf www.faszienbehandlung.jetzt.",
     )
     .await?;
@@ -56,8 +50,8 @@ pub async fn fascia_info(State(state): State<AppState>, jar: CookieJar) -> AppRe
         &state,
         jar,
         "/faszienbehandlung",
-        "Was ist Faszienbehandlung? | sachlich erklaert",
-        "Verstaendliche und SEO-freundliche Erklaerseite zur Faszienbehandlung mit serioeser Einordnung ohne Heilversprechen.",
+        "Was ist Faszienbehandlung? | sachlich erklärt",
+        "Verständliche und SEO-freundliche Erklärseite zur Faszienbehandlung mit seriöser Einordnung ohne Heilversprechen.",
     )
     .await?;
 
@@ -74,13 +68,13 @@ pub async fn services(State(state): State<AppState>, jar: CookieJar) -> AppResul
         jar,
         "/leistungen-preise",
         "Leistungen & Preise | Faszienbehandlung in Berlin",
-        "Uebersicht zu Leistungen, Termindauern und transparenten Preisen fuer www.faszienbehandlung.jetzt.",
+        "Übersicht zu Leistungen, Termindauern und transparenten Preisen für www.faszienbehandlung.jetzt.",
     )
     .await?;
 
     let template = ServicesTemplate {
+        services: content::service_cards(&shell.practice),
         shell,
-        services: content::service_cards(),
     };
     render(jar, &template)
 }
@@ -96,8 +90,8 @@ pub async fn faq(State(state): State<AppState>, jar: CookieJar) -> AppResult<Res
     .await?;
 
     let template = FaqTemplate {
+        faqs: content::faq_items(&shell.practice),
         shell,
-        faqs: content::faq_items(),
     };
     render(jar, &template)
 }
@@ -107,7 +101,7 @@ pub async fn contact(State(state): State<AppState>, jar: CookieJar) -> AppResult
         &state,
         jar,
         "/kontakt",
-        "Kontakt | Praxis fuer Faszienbehandlung",
+        "Kontakt | Praxis für Faszienbehandlung",
         "Kontaktseite mit Praxisdaten, Erreichbarkeit und direkter Verlinkung zur Terminbuchung auf www.faszienbehandlung.jetzt.",
     )
     .await?;
@@ -125,7 +119,7 @@ pub async fn imprint(State(state): State<AppState>, jar: CookieJar) -> AppResult
         jar,
         "/impressum",
         "Impressum | faszienbehandlung.jetzt",
-        "Impressum mit Platzhaltern fuer die spaetere fachliche Pruefung vor dem Livegang.",
+        "Impressum mit Platzhaltern für die spätere fachliche Prüfung vor dem Livegang.",
     )
     .await?;
 
@@ -142,7 +136,7 @@ pub async fn privacy(State(state): State<AppState>, jar: CookieJar) -> AppResult
         jar,
         "/datenschutz",
         "Datenschutz | faszienbehandlung.jetzt",
-        "DSGVO-Grundgeruest fuer Hosting, Server-Logs, Kontakt, Terminbuchung, Registrierung, Login, E-Mail-Verifizierung und Session-Cookies.",
+        "DSGVO-Grundgerüst für Hosting, Server-Logs, Kontakt, Terminbuchung, Registrierung, Login, E-Mail-Verifizierung und Session-Cookies.",
     )
     .await?;
 
@@ -157,12 +151,6 @@ pub async fn privacy(State(state): State<AppState>, jar: CookieJar) -> AppResult
 #[template(path = "pages/home.html")]
 struct HomeTemplate {
     shell: PageShell,
-    stats: Vec<StatCard>,
-    complaints: Vec<InfoCard>,
-    benefits: Vec<InfoCard>,
-    trust: Vec<InfoCard>,
-    services: Vec<ServiceCardView>,
-    faqs: Vec<FaqItemView>,
 }
 
 #[derive(Template)]

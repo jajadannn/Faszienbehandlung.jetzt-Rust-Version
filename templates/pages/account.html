@@ -4,8 +4,8 @@
 <section class="page-hero">
   <div class="container narrow">
     <p class="eyebrow">Kundenkonto</p>
-    <h1>Persoenliche Daten, Termine und Zahlungen auf einen Blick.</h1>
-    <p class="lead">Der geschuetzte Kundenbereich zeigt nur die eigenen Daten und bleibt damit datenschutzbewusst und gut nachvollziehbar.</p>
+    <h1>Persönliche Daten, Termine und Zahlungen auf einen Blick.</h1>
+    <p class="lead">Der geschützte Kundenbereich zeigt nur die eigenen Daten und bleibt damit datenschutzbewusst und gut nachvollziehbar.</p>
   </div>
 </section>
 
@@ -14,12 +14,12 @@
     <article class="content-card">
       <h2>{{ profile.full_name }}</h2>
       <p>{{ profile.email }}<br>{{ profile.phone_number }}<br>{{ profile.city }}</p>
-      <p>E-Mail bestaetigt: <strong>{{ profile.email_verified_label }}</strong><br>Status: <strong>{{ profile.status_label }}</strong></p>
+      <p>E-Mail bestätigt: <strong>{{ profile.email_verified_label }}</strong><br>Status: <strong>{{ profile.status_label }}</strong></p>
     </article>
     <article class="content-card card--sky">
       <h2>Termine</h2>
       <p>Gesamtbuchungen: <strong>{{ profile.appointment_count }}</strong></p>
-      <p>Naechster Termin: {{ profile.next_appointment_label }}</p>
+      <p>Nächster Termin: {{ profile.next_appointment_label }}</p>
       <p>Letzter vergangener Termin: {{ profile.last_appointment_label }}</p>
     </article>
     <article class="content-card card--plum">
@@ -34,13 +34,13 @@
 <section class="section section-soft">
   <div class="container">
     <div class="section-intro">
-      <p class="eyebrow">Zukuenftige Termine</p>
+      <p class="eyebrow">Zukünftige Termine</p>
       <h2>Ihre geplanten Buchungen</h2>
     </div>
     <div class="card-grid card-grid-two">
       {% if future_appointments.is_empty() %}
         <article class="content-card">
-          <h3>Derzeit keine zukuenftigen Termine</h3>
+          <h3>Derzeit keine zukünftigen Termine</h3>
           <p>Nutzen Sie die Online-Buchung, um einen neuen Wunschtermin anzufragen.</p>
           <a class="button button-primary" href="/terminbuchung">Termin buchen</a>
         </article>
@@ -62,7 +62,7 @@
   <div class="container">
     <div class="section-intro">
       <p class="eyebrow">Vergangene Termine</p>
-      <h2>Bereits dokumentierte Eintraege</h2>
+      <h2>Bereits dokumentierte Einträge</h2>
     </div>
     <div class="card-grid card-grid-two">
       {% if past_appointments.is_empty() %}

@@ -5,10 +5,28 @@ use crate::{models::AuthenticatedUser, seo::SeoMeta};
 #[derive(Clone)]
 pub struct PracticeView {
     pub name: String,
+    pub practitioner_name: String,
     pub email: String,
     pub phone: String,
     pub address_line_1: String,
     pub address_line_2: String,
+    pub region_label: String,
+    pub house_call_area: String,
+    pub opening_hours_weekdays: String,
+    pub opening_hours_saturday: String,
+    pub opening_hours_summary: String,
+    pub appointment_duration_short: String,
+    pub appointment_duration_verbose: String,
+    pub single_session_price_label: String,
+    pub single_session_price_input: String,
+    pub package_session_price_label: String,
+    pub package_session_price_input: String,
+    pub package_card_label: String,
+    pub package_validity_label: String,
+    pub package_savings_label: String,
+    pub house_call_fee_label: String,
+    pub house_call_fee_input: String,
+    pub maps_query: String,
 }
 
 #[derive(Clone)]

@@ -4,8 +4,8 @@
 <section class="page-hero">
   <div class="container narrow">
     <p class="eyebrow">Registrierung</p>
-    <h1>Sicheres Kundenkonto fuer Terminbuchung und Verlauf.</h1>
-    <p class="lead">Die Registrierung ist auf wenige notwendige Daten begrenzt und nutzt Argon2-Passwort-Hashing, E-Mail-Verifizierung und DSGVO-Hinweise als Basis fuer den spaeteren Livebetrieb.</p>
+    <h1>Sicheres Kundenkonto für Terminbuchung und Verlauf.</h1>
+    <p class="lead">Die Registrierung ist auf wenige notwendige Daten begrenzt und bereitet den strukturierten Buchungsablauf für {{ shell.practice.practitioner_name }} in {{ shell.practice.region_label }} vor.</p>
   </div>
 </section>
 
@@ -20,7 +20,7 @@
       {% endif %}
       {% if !errors.is_empty() %}
         <div class="flash flash-error">
-          <strong>Bitte pruefen Sie Ihre Eingaben.</strong>
+          <strong>Bitte prüfen Sie Ihre Eingaben.</strong>
           <ul>
             {% for error in errors %}
               <li>{{ error }}</li>
@@ -31,7 +31,7 @@
       <form method="post" class="stack-form">
         <input type="hidden" name="csrf_token" value="{{ shell.csrf_token }}">
         <label>
-          Vollstaendiger Name
+          Vollständiger Name
           <input type="text" name="full_name" value="{{ form.full_name }}" required>
         </label>
         <label>
@@ -52,20 +52,22 @@
         </label>
         <label class="checkbox">
           <input type="checkbox" name="privacy_consent" value="yes" {% if form.privacy_consent.is_some() %}checked{% endif %}>
-          <span>Ich habe die <a href="/datenschutz">Datenschutzhinweise</a> gelesen und stimme der fuer Registrierung, Login und Terminverwaltung notwendigen Datenverarbeitung zu.</span>
+          <span>Ich habe die <a href="/datenschutz">Datenschutzhinweise</a> gelesen und stimme der für Registrierung, Login und Terminverwaltung notwendigen Datenverarbeitung zu.</span>
         </label>
         <button class="button button-primary" type="submit">Kundenkonto anlegen</button>
       </form>
     </div>
     <aside class="info-panel">
-      <h2>Warum ein Kundenkonto?</h2>
-      <p>Das Konto schafft eine klare, sichere Zuordnung von Terminen, Zahlungen und E-Mail-Bestaetigungen. Kunden sehen spaeter nur ihre eigenen Daten, waehrend der Admin-Bereich rollenbasiert getrennt bleibt.</p>
+      <p class="card-kicker">Praxiszugang</p>
+      <h2>Warum ein Kundenkonto sinnvoll ist</h2>
+      <p>Das Konto schafft eine klare Zuordnung von Terminen, Zahlungen und E-Mail-Bestätigungen. So bleibt der Ablauf für {{ shell.practice.single_session_price_label }} bei {{ shell.practice.appointment_duration_verbose }} nachvollziehbar.</p>
       <ul class="feature-list">
         <li>Terminstatus im Blick</li>
         <li>Zahlungsstatus nachvollziehbar</li>
         <li>Datensparsame Erfassung</li>
         <li>E-Mail-Verifizierung vor verbindlicher Nutzung</li>
       </ul>
+      <p>{{ shell.practice.address_line_2 }} · {{ shell.practice.opening_hours_summary }}</p>
     </aside>
   </div>
 </section>

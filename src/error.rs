@@ -50,7 +50,7 @@ impl IntoResponse for AppError {
         };
 
         let title = match status {
-            StatusCode::BAD_REQUEST => "Eingabe pruefen",
+            StatusCode::BAD_REQUEST => "Eingabe prüfen",
             StatusCode::UNAUTHORIZED => "Anmeldung erforderlich",
             StatusCode::FORBIDDEN => "Zugriff verweigert",
             StatusCode::NOT_FOUND => "Seite nicht gefunden",
@@ -60,10 +60,10 @@ impl IntoResponse for AppError {
         let message = match &self {
             Self::BadRequest(message) | Self::NotFound(message) => message.clone(),
             Self::Unauthorized => {
-                "Bitte melden Sie sich an, um diesen Bereich zu oeffnen.".to_string()
+                "Bitte melden Sie sich an, um diesen Bereich zu öffnen.".to_string()
             }
             Self::Forbidden => {
-                "Dieser Bereich ist ausschliesslich fuer berechtigte Personen verfuegbar."
+                "Dieser Bereich ist ausschließlich für berechtigte Personen verfügbar."
                     .to_string()
             }
             _ => {

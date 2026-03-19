@@ -1,4 +1,4 @@
-use std::net::SocketAddr;
+use std::{net::SocketAddr, path::PathBuf};
 
 use faszienbehandlung_jetzt::{
     config::AppConfig,
@@ -13,7 +13,7 @@ use tracing::info;
 
 #[tokio::main]
 async fn main() -> AppResult<()> {
-    dotenvy::dotenv().ok();
+    load_env();
     init_tracing();
 
     let config = AppConfig::from_env()?;
@@ -30,7 +30,26 @@ async fn main() -> AppResult<()> {
             return Ok(());
         }
         Some("print-config") => {
-            info!("Konfiguration geladen fuer {}", config.base_url);
+            println!("BASE_URL={}", config.base_url);
+            println!("PRACTICE_NAME={}", config.practice_name);
+            println!("PRACTITIONER_NAME={}", config.practitioner_name);
+            println!("PRACTICE_EMAIL={}", config.practice_email);
+            println!("PRACTICE_PHONE={}", config.practice_phone);
+            println!("PRACTICE_ADDRESS_LINE_1={}", config.practice_address_line_1);
+            println!("PRACTICE_ADDRESS_LINE_2={}", config.practice_address_line_2);
+            println!("PRACTICE_REGION_LABEL={}", config.practice_region_label);
+            println!("PRACTICE_HOUSE_CALL_AREA={}", config.practice_house_call_area);
+            println!("OPENING_HOURS_WEEKDAYS={}", config.opening_hours_weekdays);
+            println!("OPENING_HOURS_SATURDAY={}", config.opening_hours_saturday);
+            println!(
+                "BOOKING_BASE_PRICE_CENTS={}",
+                config.booking_base_price_cents
+            );
+            println!(
+                "BOOKING_PACKAGE_SESSION_PRICE_CENTS={}",
+                config.booking_package_session_price_cents
+            );
+            println!("HOUSE_CALL_FEE_CENTS={}", config.house_call_fee_cents);
             return Ok(());
         }
         _ => {}
@@ -54,4 +73,13 @@ fn init_tracing() {
         .with_target(false)
         .compact()
         .init();
+}
+
+fn load_env() {
+    if dotenvy::dotenv().is_ok() {
+        return;
+    }
+
+    let manifest_env = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join(".env");
+    let _ = dotenvy::from_path(&manifest_env);
 }

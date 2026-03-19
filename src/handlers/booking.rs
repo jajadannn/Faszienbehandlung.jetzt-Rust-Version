@@ -20,7 +20,7 @@ pub async fn show_booking(State(state): State<AppState>, jar: CookieJar) -> AppR
         jar,
         "/terminbuchung",
         "Terminbuchung | Faszienbehandlung online anfragen",
-        "Prominente, DSGVO-bewusste Terminbuchung mit Kundenkonto, E-Mail-Verifizierung und gepruefter Wohnortvalidierung.",
+        "Prominente, DSGVO-bewusste Terminbuchung mit Kundenkonto, E-Mail-Verifizierung und geprüfter Wohnortvalidierung.",
     )
     .await?;
 
@@ -29,8 +29,8 @@ pub async fn show_booking(State(state): State<AppState>, jar: CookieJar) -> AppR
         if !user.email_verified && user.role == "customer" {
             Some(FlashMessage {
                 kind: "warning".to_string(),
-                title: "E-Mail-Bestaetigung ausstehend".to_string(),
-                text: "Bitte bestaetigen Sie zuerst Ihre E-Mail-Adresse, bevor Sie eine verbindliche Terminanfrage senden.".to_string(),
+                title: "E-Mail-Bestätigung ausstehend".to_string(),
+                text: "Bitte bestätigen Sie zuerst Ihre E-Mail-Adresse, bevor Sie eine verbindliche Terminanfrage senden.".to_string(),
             })
         } else {
             None
@@ -62,17 +62,17 @@ pub async fn submit_booking(
 
     if let Some(user) = &current_user {
         if user.role != "customer" {
-            errors.push("Nur Kundenkonten koennen Online-Termine buchen.".to_string());
+            errors.push("Nur Kundenkonten können Online-Termine buchen.".to_string());
         }
         if form.normalized_email() != user.email {
             errors.push(
-                "Bitte verwenden Sie fuer die Buchung dieselbe E-Mail-Adresse wie in Ihrem Kundenkonto."
+                "Bitte verwenden Sie für die Buchung dieselbe E-Mail-Adresse wie in Ihrem Kundenkonto."
                     .to_string(),
             );
         }
         if !user.email_verified {
             errors.push(
-                "Bitte bestaetigen Sie zunaechst Ihre E-Mail-Adresse, bevor Sie einen Termin anfragen."
+                "Bitte bestätigen Sie zunächst Ihre E-Mail-Adresse, bevor Sie einen Termin anfragen."
                     .to_string(),
             );
         }
@@ -110,7 +110,7 @@ pub async fn submit_booking(
         jar,
         "/terminbuchung",
         "Terminbuchung | Faszienbehandlung online anfragen",
-        "Prominente, DSGVO-bewusste Terminbuchung mit Kundenkonto, E-Mail-Verifizierung und gepruefter Wohnortvalidierung.",
+        "Prominente, DSGVO-bewusste Terminbuchung mit Kundenkonto, E-Mail-Verifizierung und geprüfter Wohnortvalidierung.",
     )
     .await?;
 
@@ -180,7 +180,7 @@ pub async fn submit_booking(
         .bind(appointment_id)
         .bind(base_price_cents)
         .bind(base_price_cents)
-        .bind("Online-Anfrage ueber Kundenkonto.")
+        .bind("Online-Anfrage über Kundenkonto.")
         .bind(now)
         .bind(now)
         .execute(&mut *tx)

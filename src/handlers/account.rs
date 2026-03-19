@@ -88,7 +88,7 @@ pub async fn dashboard(State(state): State<AppState>, jar: CookieJar) -> AppResu
             status_label: appointment_status_label(&appointment.status).to_string(),
             message: appointment
                 .message
-                .unwrap_or_else(|| "Keine zusaetzliche Nachricht".to_string()),
+                .unwrap_or_else(|| "Keine zusätzliche Nachricht".to_string()),
             total_amount_label: format_cents(appointment.total_amount_cents),
             paid_amount_label: format_cents(appointment.amount_paid_cents),
             open_amount_label: format_cents(appointment.amount_open_cents),
@@ -132,7 +132,7 @@ pub async fn dashboard(State(state): State<AppState>, jar: CookieJar) -> AppResu
         jar,
         "/konto",
         "Kundenkonto | Termine, Zahlungen und Stammdaten",
-        "Geschuetzter Kundenbereich mit persoenlichen Stammdaten, Terminstatus, Zahlungsverlauf und Uebersicht offener Betraege.",
+        "Geschützter Kundenbereich mit persönlichen Stammdaten, Terminstatus, Zahlungsverlauf und Übersicht offener Beträge.",
     )
     .await?;
 

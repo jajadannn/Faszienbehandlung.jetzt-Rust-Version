@@ -4,8 +4,8 @@
 <section class="page-hero">
   <div class="container narrow">
     <p class="eyebrow">Terminbuchung</p>
-    <h1>Terminwunsch strukturiert und datenschutzbewusst anfragen.</h1>
-    <p class="lead">Die Buchung fuehrt Besucher direkt zum Ziel: klare Felder, nachvollziehbare Hinweise, E-Mail-Verifizierung und ein Kundenkonto, das spaeter echte Terminverwaltung erlaubt.</p>
+    <h1>Terminwunsch ruhig, klar und datenschutzbewusst anfragen.</h1>
+    <p class="lead">Die Anfrage führt direkt zur Praxis in {{ shell.practice.address_line_2 }}. Aktuell ist die Sitzung mit {{ shell.practice.single_session_price_label }} bei {{ shell.practice.appointment_duration_verbose }} hinterlegt.</p>
   </div>
 </section>
 
@@ -20,7 +20,7 @@
       {% endif %}
       {% if !errors.is_empty() %}
         <div class="flash flash-error">
-          <strong>Die Anfrage ist noch nicht vollstaendig.</strong>
+          <strong>Die Anfrage ist noch nicht vollständig.</strong>
           <ul>
             {% for error in errors %}
               <li>{{ error }}</li>
@@ -31,7 +31,7 @@
       <form method="post" class="stack-form">
         <input type="hidden" name="csrf_token" value="{{ shell.csrf_token }}">
         <label>
-          Vollstaendiger Name
+          Vollständiger Name
           <input type="text" name="full_name" value="{{ form.full_name }}" required>
         </label>
         <label>
@@ -47,7 +47,7 @@
           <input type="text" name="city" value="{{ form.city }}" required>
         </label>
         <label>
-          Gewuenschter Termin
+          Gewünschter Termin
           <input type="datetime-local" name="desired_at" value="{{ form.desired_at }}" required>
         </label>
         <label>
@@ -56,29 +56,47 @@
         </label>
         {% if requires_password %}
           <label>
-            Passwort fuer Ihr Kundenkonto
+            Passwort für Ihr Kundenkonto
             <input type="password" name="password" required>
           </label>
         {% endif %}
         <label class="checkbox">
           <input type="checkbox" name="privacy_consent" value="yes" {% if form.privacy_consent.is_some() %}checked{% endif %}>
-          <span>Ich stimme der Verarbeitung meiner Angaben fuer Terminbuchung, Kundenkonto, Login, E-Mail-Verifizierung und organisatorische Rueckmeldung gemaess <a href="/datenschutz">Datenschutz</a> zu.</span>
+          <span>Ich stimme der Verarbeitung meiner Angaben für Terminbuchung, Kundenkonto, Login, E-Mail-Verifizierung und organisatorische Rückmeldung gemäß <a href="/datenschutz">Datenschutz</a> zu.</span>
         </label>
         <button class="button button-primary" type="submit">Terminwunsch senden</button>
       </form>
     </div>
     <aside class="info-panel">
-      <h2>Was nach der Anfrage passiert</h2>
+      <p class="card-kicker">Praxisrahmen</p>
+      <h2>{{ shell.practice.single_session_price_label }} · {{ shell.practice.appointment_duration_short }}</h2>
+      <p>Praxis in {{ shell.practice.address_line_1 }}, {{ shell.practice.address_line_2 }}. Erreichbar zu {{ shell.practice.opening_hours_summary }}.</p>
       <ul class="feature-list">
-        <li>Wohnort wird technisch ueber Geocoding validiert</li>
-        <li>E-Mail-Adresse wird bestaetigt</li>
+        <li>Wohnort wird technisch über Geocoding validiert</li>
+        <li>E-Mail-Adresse wird bestätigt</li>
         <li>Im Kundenkonto erscheinen Termin- und Zahlungsstatus</li>
         <li>Der Admin-Bereich kann Anfragen professionell nachverfolgen</li>
       </ul>
       {% if requires_password %}
-        <p>Wenn Sie noch kein Konto haben, wird mit dieser Anfrage automatisch ein sicheres Kundenkonto fuer Sie eingerichtet.</p>
+        <p>Wenn Sie noch kein Konto haben, wird mit dieser Anfrage automatisch ein sicheres Kundenkonto für Sie eingerichtet.</p>
       {% endif %}
+      <p><a href="mailto:{{ shell.practice.email }}">{{ shell.practice.email }}</a><br><a href="tel:{{ shell.practice.phone }}">{{ shell.practice.phone }}</a></p>
     </aside>
+  </div>
+</section>
+
+<section class="section section-pale">
+  <div class="container card-grid card-grid-two">
+    <article class="content-card">
+      <p class="card-kicker">Vor dem Termin</p>
+      <h3>Was wir für die Anfrage brauchen</h3>
+      <p>Nur die notwendigen Daten für Terminorganisation, Kundenkonto und Rückmeldung. Keine unnötigen Pflichtfelder, keine unklare Weitergabe.</p>
+    </article>
+    <article class="content-card card--sky">
+      <p class="card-kicker">Hausbesuche</p>
+      <h3>Optional mobil in der Region</h3>
+      <p>Hausbesuche sind in {{ shell.practice.house_call_area }} nach Abstimmung möglich. Dafür ist aktuell eine Fahrtpauschale von {{ shell.practice.house_call_fee_label }} vorgesehen.</p>
+    </article>
   </div>
 </section>
 {% endblock %}

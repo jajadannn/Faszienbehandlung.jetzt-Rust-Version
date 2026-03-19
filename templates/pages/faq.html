@@ -4,19 +4,37 @@
 <section class="page-hero">
   <div class="container narrow">
     <p class="eyebrow">FAQ</p>
-    <h1>Hauefige Fragen zu Behandlung, Buchung und Kundenkonto.</h1>
-    <p class="lead">Die Antworten sind bewusst sachlich gehalten und fuer eine serioese Praxiswebseite SEO-freundlich strukturiert.</p>
+    <h1>Häufige Fragen zu Behandlung, Buchung und Praxisablauf.</h1>
+    <p class="lead">Die Antworten sind bewusst sachlich formuliert, lokal verankert und auf eine vertrauenswürdige Praxisführung in {{ shell.practice.region_label }} abgestimmt.</p>
   </div>
 </section>
 
-<section class="section">
-  <div class="container narrow faq-list">
-    {% for item in faqs %}
-      <details class="faq-item" {% if loop.first %}open{% endif %}>
-        <summary>{{ item.question }}</summary>
-        <p>{{ item.answer }}</p>
-      </details>
-    {% endfor %}
+<section class="section section-white">
+  <div class="container narrow">
+    <div class="quick-answer">
+      <strong>Schnelle Orientierung</strong>
+      <p>Aktuell ist die Einzelsitzung mit {{ shell.practice.single_session_price_label }} bei {{ shell.practice.appointment_duration_verbose }} abgebildet. Die Online-Terminbuchung führt direkt in das geschützte Kundenkonto mit E-Mail-Bestätigung.</p>
+    </div>
+    <div class="faq-list">
+      {% for item in faqs %}
+        <details class="faq-item" {% if loop.first %}open{% endif %}>
+          <summary>{{ item.question }}</summary>
+          <p>{{ item.answer }}</p>
+        </details>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="cta-section">
+  <div class="cta-inner container">
+    <p class="section-tag">Noch Fragen?</p>
+    <h2>Direkt zur Anfrage oder<br><em>persönlich Kontakt aufnehmen</em></h2>
+    <p>{{ shell.practice.practitioner_name }} und die Praxis in {{ shell.practice.address_line_2 }} sind über die Terminbuchung oder per E-Mail erreichbar.</p>
+    <div class="hero-actions">
+      <a class="btn-cta-large" href="/terminbuchung">Jetzt Termin anfragen</a>
+      <a class="btn-secondary" href="/kontakt">Kontakt ansehen</a>
+    </div>
   </div>
 </section>
 {% endblock %}
