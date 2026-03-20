@@ -1,0 +1,41 @@
+name: Deploy Self-Hosted
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: production-deploy
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on:
+      - self-hosted
+      - windows
+      - x64
+    env:
+      CARGO_TERM_COLOR: always
+      DEPLOY_ROOT: ${{ vars.DEPLOY_ROOT }}
+      DEPLOY_ENV_FILE: ${{ vars.DEPLOY_ENV_FILE }}
+      WINDOWS_SERVICE_NAME: ${{ vars.WINDOWS_SERVICE_NAME }}
+      APP_EXECUTABLE_NAME: faszienbehandlung_jetzt.exe
+    steps:
+      - name: Repository auschecken
+        uses: actions/checkout@v4
+
+      - name: Rust Toolchain bereitstellen
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cargo Cache nutzen
+        uses: Swatinem/rust-cache@v2
+
+      - name: Release bauen
+        shell: pwsh
+        run: cargo build --release
+
+      - name: Deployment ausfuehren
+        shell: pwsh
+        run: ./scripts/deploy-release.ps1

@@ -52,6 +52,10 @@ pub struct PageShell {
     pub current_user: Option<NavUserView>,
     pub csrf_token: String,
     pub year: i32,
+    pub auto_reload_enabled: bool,
+    pub auto_reload_interval_ms: u64,
+    pub auto_reload_endpoint: String,
+    pub server_instance_id: String,
     pub practice: PracticeView,
 }
 
@@ -150,6 +154,7 @@ pub struct CustomerProfileView {
     pub email: String,
     pub phone_number: String,
     pub city: String,
+    pub email_verified: bool,
     pub email_verified_label: String,
     pub status_label: String,
     pub appointment_count: String,

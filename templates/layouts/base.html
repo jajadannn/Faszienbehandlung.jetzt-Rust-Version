@@ -12,6 +12,10 @@
   <meta property="og:url" content="{{ shell.meta.og_url }}">
   <meta property="og:image" content="{{ shell.meta.og_image }}">
   <meta name="theme-color" content="#70AECD">
+  <meta name="app-auto-reload" content="{% if shell.auto_reload_enabled %}true{% else %}false{% endif %}">
+  <meta name="app-auto-reload-endpoint" content="{{ shell.auto_reload_endpoint }}">
+  <meta name="app-auto-reload-interval-ms" content="{{ shell.auto_reload_interval_ms }}">
+  <meta name="app-instance-id" content="{{ shell.server_instance_id }}">
   <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
   <link rel="stylesheet" href="/static/css/site.css">
   <script defer src="/static/js/site.js"></script>

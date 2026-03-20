@@ -1,8 +1,51 @@
 use std::env;
 
-use anyhow::Context;
+use anyhow::{Context, anyhow};
 
 use crate::error::AppResult;
+
+#[derive(Clone, Debug)]
+pub enum SmtpSecurity {
+    Auto,
+    ImplicitTls,
+    StartTls,
+    Plain,
+}
+
+impl SmtpSecurity {
+    pub fn parse(value: &str) -> AppResult<Self> {
+        match value.trim().to_ascii_lowercase().as_str() {
+            "auto" => Ok(Self::Auto),
+            "implicit_tls" | "implicit-tls" | "ssl" | "tls" | "smtps" => Ok(Self::ImplicitTls),
+            "starttls" | "start_tls" | "start-tls" => Ok(Self::StartTls),
+            "plain" | "plaintext" | "none" => Ok(Self::Plain),
+            other => Err(anyhow!(
+                "SMTP_SECURITY muss auto, implicit_tls, starttls oder plain sein (aktuell: {other})"
+            )
+            .into()),
+        }
+    }
+
+    pub fn resolved_for_port(&self, port: u16) -> Self {
+        match self {
+            Self::Auto => match port {
+                465 => Self::ImplicitTls,
+                587 => Self::StartTls,
+                _ => Self::Plain,
+            },
+            other => other.clone(),
+        }
+    }
+
+    pub fn as_str(&self) -> &'static str {
+        match self {
+            Self::Auto => "auto",
+            Self::ImplicitTls => "implicit_tls",
+            Self::StartTls => "starttls",
+            Self::Plain => "plain",
+        }
+    }
+}
 
 #[derive(Clone, Debug)]
 pub struct AppConfig {
@@ -10,6 +53,8 @@ pub struct AppConfig {
     pub bind_address: String,
     pub base_url: String,
     pub database_url: String,
+    pub auto_reload_enabled: bool,
+    pub auto_reload_interval_ms: u64,
     pub session_cookie_secure: bool,
     pub session_ttl_hours: i64,
     pub practice_name: String,
@@ -28,9 +73,11 @@ pub struct AppConfig {
     pub booking_package_session_count: i64,
     pub booking_package_validity_months: i64,
     pub house_call_fee_cents: i64,
+    pub email_resend_cooldown_seconds: i64,
     pub geocoding_user_agent: String,
     pub smtp_host: Option<String>,
     pub smtp_port: u16,
+    pub smtp_security: SmtpSecurity,
     pub smtp_username: Option<String>,
     pub smtp_password: Option<String>,
     pub smtp_from: String,
@@ -45,6 +92,21 @@ impl AppConfig {
             .unwrap_or_else(|_| "https://www.faszienbehandlung.jetzt".to_string());
         let database_url = env::var("DATABASE_URL")
             .unwrap_or_else(|_| "sqlite://data/faszienbehandlung.db".to_string());
+        let auto_reload_enabled = env::var("AUTO_RELOAD_ENABLED")
+            .unwrap_or_else(|_| {
+                if app_env == "production" {
+                    "false"
+                } else {
+                    "true"
+                }
+                .to_string()
+            })
+            .parse()
+            .context("AUTO_RELOAD_ENABLED muss true oder false sein")?;
+        let auto_reload_interval_ms = env::var("AUTO_RELOAD_INTERVAL_MS")
+            .unwrap_or_else(|_| "1200".to_string())
+            .parse()
+            .context("AUTO_RELOAD_INTERVAL_MS muss eine Zahl sein")?;
         let session_cookie_secure = env::var("SESSION_COOKIE_SECURE")
             .unwrap_or_else(|_| {
                 if app_env == "production" {
@@ -105,6 +167,10 @@ impl AppConfig {
             .unwrap_or_else(|_| "1000".to_string())
             .parse()
             .context("HOUSE_CALL_FEE_CENTS muss eine Zahl sein")?;
+        let email_resend_cooldown_seconds: i64 = env::var("EMAIL_RESEND_COOLDOWN_SECONDS")
+            .unwrap_or_else(|_| "180".to_string())
+            .parse()
+            .context("EMAIL_RESEND_COOLDOWN_SECONDS muss eine Zahl sein")?;
         let geocoding_user_agent = env::var("GEOCODING_USER_AGENT").unwrap_or_else(|_| {
             "faszienbehandlung-jetzt/1.0 (kontakt@faszienbehandlung.jetzt)".to_string()
         });
@@ -115,6 +181,12 @@ impl AppConfig {
             .unwrap_or_else(|_| "587".to_string())
             .parse()
             .context("SMTP_PORT muss eine Zahl sein")?;
+        let smtp_security = env::var("SMTP_SECURITY")
+            .ok()
+            .filter(|value| !value.trim().is_empty())
+            .map(|value| SmtpSecurity::parse(&value))
+            .transpose()?
+            .unwrap_or(SmtpSecurity::Auto);
         let smtp_username = env::var("SMTP_USERNAME")
             .ok()
             .filter(|value| !value.trim().is_empty());
@@ -129,6 +201,8 @@ impl AppConfig {
             bind_address,
             base_url,
             database_url,
+            auto_reload_enabled,
+            auto_reload_interval_ms,
             session_cookie_secure,
             session_ttl_hours,
             practice_name,
@@ -147,9 +221,11 @@ impl AppConfig {
             booking_package_session_count,
             booking_package_validity_months,
             house_call_fee_cents,
+            email_resend_cooldown_seconds,
             geocoding_user_agent,
             smtp_host,
             smtp_port,
+            smtp_security,
             smtp_username,
             smtp_password,
             smtp_from,

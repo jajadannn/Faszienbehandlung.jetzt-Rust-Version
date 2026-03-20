@@ -10,7 +10,7 @@ use serde::Deserialize;
 use crate::{
     auth as auth_helpers,
     error::{AppError, AppResult},
-    forms::{LoginForm, LogoutForm, RegisterForm},
+    forms::{ForgotPasswordForm, LoginForm, LogoutForm, RegisterForm, ResetPasswordForm},
     models::User,
     state::AppState,
     utils::{normalize_city, normalize_phone, now_utc},
@@ -141,23 +141,7 @@ pub async fn register(
 }
 
 pub async fn show_login(State(state): State<AppState>, jar: CookieJar) -> AppResult<Response> {
-    let (jar, shell, _) = build_shell(
-        &state,
-        jar,
-        "/anmeldung",
-        "Anmeldung | Kundenkonto & Admin-Login",
-        "Sicherer Login für Kundenkonto und Admin-Bereich auf www.faszienbehandlung.jetzt.",
-    )
-    .await?;
-
-    let template = LoginTemplate {
-        shell,
-        form: LoginForm::default(),
-        errors: Vec::new(),
-        flash: None,
-    };
-
-    render(jar, &template)
+    render_login_page(&state, jar, LoginForm::default(), Vec::new(), None).await
 }
 
 pub async fn login(
@@ -187,23 +171,15 @@ pub async fn login(
         errors.push("Die E-Mail-Adresse oder das Passwort stimmt nicht.".to_string());
     }
 
-    let (jar, shell, _) = build_shell(
-        &state,
-        jar,
-        "/anmeldung",
-        "Anmeldung | Kundenkonto & Admin-Login",
-        "Sicherer Login für Kundenkonto und Admin-Bereich auf www.faszienbehandlung.jetzt.",
-    )
-    .await?;
-
     if !errors.is_empty() {
-        let template = LoginTemplate {
-            shell,
-            form,
+        return render_login_page(
+            &state,
+            jar,
+            form.clone(),
             errors,
-            flash: None,
-        };
-        return render(jar, &template);
+            None,
+        )
+        .await;
     }
 
     let user = user.expect("checked above");
@@ -232,6 +208,158 @@ pub async fn login(
     Ok(redirect(jar, target))
 }
 
+pub async fn show_forgot_password(
+    State(state): State<AppState>,
+    jar: CookieJar,
+) -> AppResult<Response> {
+    render_forgot_password_page(
+        &state,
+        jar,
+        ForgotPasswordForm::default(),
+        Vec::new(),
+        None,
+    )
+    .await
+}
+
+pub async fn request_password_reset(
+    State(state): State<AppState>,
+    jar: CookieJar,
+    Form(form): Form<ForgotPasswordForm>,
+) -> AppResult<Response> {
+    auth_helpers::validate_csrf(&jar, &form.csrf_token)?;
+
+    let errors = form.validate();
+    if !errors.is_empty() {
+        return render_forgot_password_page(&state, jar, form, errors, None).await;
+    }
+
+    if let Some(user) = auth_helpers::find_user_by_email(&state, &form.email).await? {
+        let token =
+            auth_helpers::create_password_reset_token(&state, user.id, &user.email).await?;
+        state
+            .email_service
+            .send_password_reset_email(&user.email, &user.full_name, &token)
+            .await?;
+    }
+
+    render_forgot_password_page(
+        &state,
+        jar,
+        ForgotPasswordForm::default(),
+        Vec::new(),
+        Some(FlashMessage {
+            kind: "success".to_string(),
+            title: "Falls ein Konto existiert".to_string(),
+            text: "Wenn zu dieser E-Mail-Adresse ein Kundenkonto hinterlegt ist, haben wir soeben eine E-Mail zum Zurücksetzen des Passworts versendet.".to_string(),
+        }),
+    )
+    .await
+}
+
+pub async fn show_reset_password(
+    State(state): State<AppState>,
+    jar: CookieJar,
+    Query(query): Query<ResetPasswordQuery>,
+) -> AppResult<Response> {
+    let token = query.token.unwrap_or_default();
+    let token_valid = if token.is_empty() {
+        false
+    } else {
+        auth_helpers::password_reset_token_is_valid(&state, &token).await?
+    };
+
+    let flash = if token_valid {
+        None
+    } else {
+        Some(FlashMessage {
+            kind: "warning".to_string(),
+            title: "Link prüfen".to_string(),
+            text: "Der Zurücksetzungslink ist ungültig, unvollständig oder bereits abgelaufen. Fordern Sie bei Bedarf einfach einen neuen Link an.".to_string(),
+        })
+    };
+
+    render_reset_password_page(
+        &state,
+        jar,
+        ResetPasswordForm {
+            token,
+            ..ResetPasswordForm::default()
+        },
+        Vec::new(),
+        flash,
+        token_valid,
+    )
+    .await
+}
+
+pub async fn reset_password(
+    State(state): State<AppState>,
+    jar: CookieJar,
+    Form(form): Form<ResetPasswordForm>,
+) -> AppResult<Response> {
+    auth_helpers::validate_csrf(&jar, &form.csrf_token)?;
+
+    let mut errors = form.validate();
+    let token_valid = if form.token.trim().is_empty() {
+        false
+    } else {
+        auth_helpers::password_reset_token_is_valid(&state, &form.token).await?
+    };
+
+    if !token_valid {
+        errors.push("Der Zurücksetzungslink ist ungültig oder abgelaufen.".to_string());
+    }
+
+    if !errors.is_empty() {
+        return render_reset_password_page(
+            &state,
+            jar,
+            ResetPasswordForm {
+                token: form.token.clone(),
+                ..ResetPasswordForm::default()
+            },
+            errors,
+            None,
+            token_valid,
+        )
+        .await;
+    }
+
+    let password_hash = auth_helpers::hash_password(&form.password)?;
+    if auth_helpers::reset_password_with_token(&state, &form.token, &password_hash)
+        .await?
+        .is_none()
+    {
+        return render_reset_password_page(
+            &state,
+            jar,
+            ResetPasswordForm {
+                token: form.token,
+                ..ResetPasswordForm::default()
+            },
+            vec!["Der Zurücksetzungslink ist ungültig oder abgelaufen.".to_string()],
+            None,
+            false,
+        )
+        .await;
+    }
+
+    render_reset_password_page(
+        &state,
+        jar,
+        ResetPasswordForm::default(),
+        Vec::new(),
+        Some(FlashMessage {
+            kind: "success".to_string(),
+            title: "Passwort aktualisiert".to_string(),
+            text: "Ihr Passwort wurde erfolgreich geändert. Sie können sich jetzt mit dem neuen Passwort anmelden.".to_string(),
+        }),
+        false,
+    )
+    .await
+}
+
 pub async fn logout(
     State(state): State<AppState>,
     jar: CookieJar,
@@ -247,15 +375,6 @@ pub async fn verify_email(
     jar: CookieJar,
     Query(query): Query<VerifyEmailQuery>,
 ) -> AppResult<Response> {
-    let (jar, shell, _) = build_shell(
-        &state,
-        jar,
-        "/verify-email",
-        "E-Mail bestätigen | faszienbehandlung.jetzt",
-        "Bestätigung der E-Mail-Adresse für das Kundenkonto und die sichere Terminbuchung.",
-    )
-    .await?;
-
     let success = match query.token {
         Some(token) => auth_helpers::verify_email_token(&state, &token)
             .await?
@@ -263,12 +382,123 @@ pub async fn verify_email(
         None => false,
     };
 
-    let template = VerifyTemplate { shell, success };
+    render_verify_page(
+        &state,
+        jar,
+        success,
+        None,
+    )
+    .await
+}
+
+async fn render_login_page(
+    state: &AppState,
+    jar: CookieJar,
+    form: LoginForm,
+    errors: Vec<String>,
+    flash: Option<FlashMessage>,
+) -> AppResult<Response> {
+    let (jar, shell, _) = build_shell(
+        state,
+        jar,
+        "/anmeldung",
+        "Anmeldung | Kundenkonto & Admin-Login",
+        "Sicherer Login für Kundenkonto und Admin-Bereich auf www.faszienbehandlung.jetzt.",
+    )
+    .await?;
+
+    let template = LoginTemplate {
+        shell,
+        form,
+        errors,
+        flash,
+    };
+
+    render(jar, &template)
+}
+
+async fn render_verify_page(
+    state: &AppState,
+    jar: CookieJar,
+    success: bool,
+    flash: Option<FlashMessage>,
+) -> AppResult<Response> {
+    let (jar, shell, _) = build_shell(
+        state,
+        jar,
+        "/verify-email",
+        "E-Mail bestätigen | faszienbehandlung.jetzt",
+        "Bestätigung der E-Mail-Adresse für das Kundenkonto und die sichere Terminbuchung.",
+    )
+    .await?;
+
+    let template = VerifyTemplate {
+        shell,
+        success,
+        flash,
+    };
+    render(jar, &template)
+}
+
+async fn render_forgot_password_page(
+    state: &AppState,
+    jar: CookieJar,
+    form: ForgotPasswordForm,
+    errors: Vec<String>,
+    flash: Option<FlashMessage>,
+) -> AppResult<Response> {
+    let (jar, shell, _) = build_shell(
+        state,
+        jar,
+        "/passwort-vergessen",
+        "Passwort zurücksetzen | Kundenkonto",
+        "Sichere Zurücksetzung des Passworts per E-Mail-Link für das Kundenkonto auf www.faszienbehandlung.jetzt.",
+    )
+    .await?;
+
+    let template = ForgotPasswordTemplate {
+        shell,
+        form,
+        errors,
+        flash,
+    };
+    render(jar, &template)
+}
+
+async fn render_reset_password_page(
+    state: &AppState,
+    jar: CookieJar,
+    form: ResetPasswordForm,
+    errors: Vec<String>,
+    flash: Option<FlashMessage>,
+    token_valid: bool,
+) -> AppResult<Response> {
+    let (jar, shell, _) = build_shell(
+        state,
+        jar,
+        "/passwort-zuruecksetzen",
+        "Neues Passwort festlegen | Kundenkonto",
+        "Neues Passwort sicher festlegen, nachdem der Zurücksetzungslink aus der E-Mail geöffnet wurde.",
+    )
+    .await?;
+
+    let template = ResetPasswordTemplate {
+        shell,
+        form,
+        errors,
+        flash,
+        token_valid,
+    };
     render(jar, &template)
 }
 
 #[derive(Debug, Deserialize)]
 pub struct VerifyEmailQuery {
+    pub token: Option<String>,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct ResetPasswordQuery {
     pub token: Option<String>,
 }
 
@@ -295,4 +525,24 @@ struct LoginTemplate {
 struct VerifyTemplate {
     shell: PageShell,
     success: bool,
+    flash: Option<FlashMessage>,
+}
+
+#[derive(Template)]
+#[template(path = "pages/forgot_password.html")]
+struct ForgotPasswordTemplate {
+    shell: PageShell,
+    form: ForgotPasswordForm,
+    errors: Vec<String>,
+    flash: Option<FlashMessage>,
+}
+
+#[derive(Template)]
+#[template(path = "pages/reset_password.html")]
+struct ResetPasswordTemplate {
+    shell: PageShell,
+    form: ResetPasswordForm,
+    errors: Vec<String>,
+    flash: Option<FlashMessage>,
+    token_valid: bool,
 }

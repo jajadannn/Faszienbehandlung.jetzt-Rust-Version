@@ -521,6 +521,7 @@ async fn render_customer_detail_page(
             email: profile.email,
             phone_number: profile.phone_number,
             city: profile.city,
+            email_verified: profile.email_verified,
             email_verified_label: if profile.email_verified {
                 "Ja".to_string()
             } else {

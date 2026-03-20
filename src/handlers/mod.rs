@@ -7,13 +7,16 @@ pub mod pages;
 use askama::Template;
 use axum::{
     Router,
+    Json,
     extract::State,
+    http::StatusCode,
     middleware,
     response::{Html, IntoResponse, Redirect, Response},
     routing::{get, post},
 };
 use axum_extra::extract::cookie::CookieJar;
 use chrono::{Datelike, Utc};
+use serde::Serialize;
 use tower_http::{services::ServeDir, trace::TraceLayer};
 
 use crate::{
@@ -44,8 +47,20 @@ pub fn router(state: AppState) -> Router {
             get(auth::show_register).post(auth::register),
         )
         .route("/anmeldung", get(auth::show_login).post(auth::login))
+        .route(
+            "/passwort-vergessen",
+            get(auth::show_forgot_password).post(auth::request_password_reset),
+        )
+        .route(
+            "/passwort-zuruecksetzen",
+            get(auth::show_reset_password).post(auth::reset_password),
+        )
         .route("/logout", post(auth::logout))
         .route("/konto", get(account::dashboard))
+        .route(
+            "/konto/verify-email/resend",
+            post(account::resend_verification),
+        )
         .route("/admin", get(admin::dashboard))
         .route("/admin/kunden/:customer_id", get(admin::customer_detail))
         .route("/admin/kunden/:customer_id/notizen", post(admin::add_note))
@@ -64,6 +79,7 @@ pub fn router(state: AppState) -> Router {
         .route("/impressum", get(pages::imprint))
         .route("/datenschutz", get(pages::privacy))
         .route("/verify-email", get(auth::verify_email))
+        .route("/__dev/reload", get(dev_reload_state))
         .nest_service("/static", ServeDir::new("static"))
         .fallback(not_found)
         .layer(TraceLayer::new_for_http())
@@ -99,6 +115,10 @@ pub async fn build_shell(
         current_user: current_user.as_ref().map(Into::into),
         csrf_token,
         year: Utc::now().year(),
+        auto_reload_enabled: config.auto_reload_enabled,
+        auto_reload_interval_ms: config.auto_reload_interval_ms,
+        auto_reload_endpoint: "/__dev/reload".to_string(),
+        server_instance_id: state.server_instance_id.as_ref().clone(),
         practice: PracticeView {
             name: config.practice_name.clone(),
             practitioner_name: config.practitioner_name.clone(),
@@ -163,4 +183,20 @@ async fn not_found(State(_state): State<AppState>) -> impl IntoResponse {
 
 pub fn redirect(jar: CookieJar, path: &str) -> Response {
     (jar, Redirect::to(path)).into_response()
+}
+
+#[derive(Serialize)]
+struct ReloadState {
+    instance_id: String,
+}
+
+async fn dev_reload_state(State(state): State<AppState>) -> Response {
+    if !state.config.auto_reload_enabled {
+        return StatusCode::NOT_FOUND.into_response();
+    }
+
+    Json(ReloadState {
+        instance_id: state.server_instance_id.as_ref().clone(),
+    })
+    .into_response()
 }

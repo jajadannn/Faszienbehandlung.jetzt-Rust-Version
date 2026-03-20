@@ -62,7 +62,7 @@
         {% endif %}
         <label class="checkbox">
           <input type="checkbox" name="privacy_consent" value="yes" {% if form.privacy_consent.is_some() %}checked{% endif %}>
-          <span>Ich stimme der Verarbeitung meiner Angaben für Terminbuchung, Kundenkonto, Login, E-Mail-Verifizierung und organisatorische Rückmeldung gemäß <a href="/datenschutz">Datenschutz</a> zu.</span>
+          <span>Ich stimme der Verarbeitung meiner Angaben für Terminbuchung, Kundenkonto, Login, E-Mail-Verifizierung und organisatorische Rückmeldung gemäß <a class="accent-link" href="/datenschutz">Datenschutz</a> zu.</span>
         </label>
         <button class="button button-primary" type="submit">Terminwunsch senden</button>
       </form>

@@ -1,0 +1,16 @@
+[Unit]
+Description=faszienbehandlung.jetzt
+After=network.target
+
+[Service]
+Type=simple
+User=www-data
+Group=www-data
+WorkingDirectory=/opt/faszienbehandlung/current
+ExecStart=/opt/faszienbehandlung/current/faszienbehandlung_jetzt
+Restart=always
+RestartSec=5
+EnvironmentFile=/opt/faszienbehandlung/current/.env
+
+[Install]
+WantedBy=multi-user.target

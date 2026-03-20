@@ -5,12 +5,19 @@
   <div class="container narrow">
     <p class="eyebrow">E-Mail-Verifizierung</p>
     <h1>{% if success %}E-Mail-Adresse erfolgreich bestätigt.{% else %}Verifizierungslink ungültig oder abgelaufen.{% endif %}</h1>
-    <p class="lead">{% if success %}Ihr Kundenkonto kann jetzt für Buchung und Login in der Praxis {{ shell.practice.name }} voll genutzt werden.{% else %}Bitte fordern Sie bei Bedarf einen neuen Bestätigungslink an oder registrieren Sie sich erneut.{% endif %}</p>
+    <p class="lead">{% if success %}Ihr Kundenkonto kann jetzt für Buchung und Login in der Praxis {{ shell.practice.name }} voll genutzt werden.{% else %}Melden Sie sich im Kundenkonto an, wenn Sie einen neuen Bestätigungslink an die hinterlegte Adresse senden möchten.{% endif %}</p>
   </div>
 </section>
 
 <section class="section">
   <div class="container narrow">
+    {% if let Some(flash) = flash %}
+      <div class="flash flash-{{ flash.kind }}">
+        <strong>{{ flash.title }}</strong>
+        <p>{{ flash.text }}</p>
+      </div>
+    {% endif %}
+
     <div class="hero-actions">
       <a class="button button-primary" href="/anmeldung">Zur Anmeldung</a>
       <a class="button button-secondary" href="/terminbuchung">Zur Terminbuchung</a>

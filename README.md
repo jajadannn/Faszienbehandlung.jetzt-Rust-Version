@@ -92,6 +92,36 @@ Danach ist die App standardmaessig unter `http://127.0.0.1:3000` erreichbar.
 
 Wichtig: Aenderungen an `.env` werden erst nach einem Neustart von `cargo run` sichtbar, weil die Konfiguration beim Start geladen wird.
 
+## Lokale Auto-Aktualisierung
+
+Fuer die lokale Entwicklung ist Auto-Reload vorbereitet:
+
+1. `cargo-watch` einmalig installieren:
+
+```bash
+cargo install cargo-watch
+```
+
+2. Unter Windows mit dem beigelegten Watch-Skript starten:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\dev-watch.ps1
+```
+
+Unter Linux:
+
+```bash
+chmod +x ./scripts/dev-watch.sh
+./scripts/dev-watch.sh
+```
+
+Dann werden `src`, `templates`, `static`, `migrations` und `.env` ueberwacht. Sobald sich beim Rebuild die Server-Instanz aendert, aktualisiert der Browser die geoeffnete Seite automatisch.
+
+Wichtige Variablen:
+
+- `AUTO_RELOAD_ENABLED=true|false`
+- `AUTO_RELOAD_INTERVAL_MS=1200`
+
 ## Wichtige Praxiswerte in `.env`
 
 Diese Werte steuern die sichtbaren Praxisdaten und zentrale Inhalte der Startseite:
@@ -143,6 +173,41 @@ Diese Werte steuern die sichtbaren Praxisdaten und zentrale Inhalte der Startsei
 - SMTP fuer echte Transaktionsmails aktivieren.
 - Backups, Monitoring, strukturierte Logs und Secret-Management vorsehen.
 - Vor Livegang Rate Limiting, Fehlerseiten, Mail-Queues und Passwort-Reset-Flows weiter ausbauen.
+
+## Automatisches Deployment aus GitHub
+
+Im Projekt ist eine GitHub-Actions-Basis fuer automatisches Deployment auf Windows- und Linux-Self-Hosted-Runnern enthalten:
+
+- Windows-Workflow: `.github/workflows/deploy-self-hosted.yml`
+- Windows-Deploy-Skript: `scripts/deploy-release.ps1`
+- Linux-Workflow: `.github/workflows/deploy-self-hosted-linux.yml`
+- Linux-Deploy-Skript: `scripts/deploy-release.sh`
+- Beispiel fuer `systemd`: `deploy/systemd/faszienbehandlung_jetzt.service.example`
+
+Typischer Ablauf:
+
+1. Auf dem Zielserver einen GitHub Self-Hosted Runner fuer dieses Repository registrieren.
+2. Im Repository unter `Settings -> Secrets and variables -> Actions -> Variables` setzen:
+   - `DEPLOY_ROOT`
+   - `DEPLOY_ENV_FILE`
+   - optional `WINDOWS_SERVICE_NAME` fuer Windows
+   - optional `SYSTEMD_SERVICE_NAME` fuer Linux
+3. Bei jedem Push auf `main` baut GitHub Actions die Release-Binary und fuehrt das passende Deploy-Skript auf dem Runner aus.
+
+Das Deploy-Skript:
+
+- kopiert Binary, Templates, Static Assets und Migrationen nach `DEPLOY_ROOT/current`
+- uebernimmt auf Wunsch eine externe `.env`
+- kann unter Windows einen Windows-Service und unter Linux einen `systemd`-Service neu starten
+- faellt ohne Service-Namen auf einen direkten Prozess-Neustart zurueck
+
+Fuer produktive Stabilitaet ist auf beiden Plattformen ein echter Service weiterhin die bessere Wahl als ein loser Hintergrundprozess.
+
+### Linux-Hinweise
+
+- Der Self-Hosted Runner braucht Schreibrechte auf `DEPLOY_ROOT`.
+- Wenn `SYSTEMD_SERVICE_NAME` genutzt wird, braucht der Runner zusaetzlich die Berechtigung, diesen Dienst neu zu starten.
+- Das Beispiel unter `deploy/systemd/faszienbehandlung_jetzt.service.example` ist eine gute Basis fuer einen produktiven Linux-Dienst.
 
 ## Was vor echtem Livegang geprueft werden muss
 

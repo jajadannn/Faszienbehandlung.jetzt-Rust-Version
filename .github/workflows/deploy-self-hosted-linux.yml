@@ -1,0 +1,42 @@
+name: Deploy Self-Hosted Linux
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: production-deploy-linux
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on:
+      - self-hosted
+      - linux
+      - x64
+    env:
+      CARGO_TERM_COLOR: always
+      DEPLOY_ROOT: ${{ vars.DEPLOY_ROOT }}
+      DEPLOY_ENV_FILE: ${{ vars.DEPLOY_ENV_FILE }}
+      SYSTEMD_SERVICE_NAME: ${{ vars.SYSTEMD_SERVICE_NAME }}
+      APP_EXECUTABLE_NAME: faszienbehandlung_jetzt
+    steps:
+      - name: Repository auschecken
+        uses: actions/checkout@v4
+
+      - name: Rust Toolchain bereitstellen
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cargo Cache nutzen
+        uses: Swatinem/rust-cache@v2
+
+      - name: Deploy-Skript ausfuehrbar machen
+        run: chmod +x ./scripts/deploy-release.sh
+
+      - name: Release bauen
+        run: cargo build --release
+
+      - name: Deployment ausfuehren
+        run: ./scripts/deploy-release.sh

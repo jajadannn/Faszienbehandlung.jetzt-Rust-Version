@@ -56,6 +56,32 @@ pub struct LogoutForm {
     pub csrf_token: String,
 }
 
+#[derive(Debug, Clone, Default, Deserialize)]
+pub struct CsrfForm {
+    pub csrf_token: String,
+}
+
+#[derive(Debug, Clone, Default, Deserialize)]
+pub struct ResendVerificationForm {
+    pub csrf_token: String,
+    pub email: String,
+    pub return_to: String,
+}
+
+#[derive(Debug, Clone, Default, Deserialize)]
+pub struct ForgotPasswordForm {
+    pub csrf_token: String,
+    pub email: String,
+}
+
+#[derive(Debug, Clone, Default, Deserialize)]
+pub struct ResetPasswordForm {
+    pub csrf_token: String,
+    pub token: String,
+    pub password: String,
+    pub password_confirm: String,
+}
+
 impl LoginForm {
     pub fn validate(&self) -> Vec<String> {
         let mut errors = Vec::new();
@@ -70,6 +96,48 @@ impl LoginForm {
 
     pub fn normalized_email(&self) -> String {
         normalize_email(&self.email)
+    }
+}
+
+impl ResendVerificationForm {
+    pub fn validate(&self) -> Vec<String> {
+        let mut errors = Vec::new();
+        if !self.email.contains('@') {
+            errors.push("Bitte geben Sie eine gültige E-Mail-Adresse ein.".to_string());
+        }
+        errors
+    }
+
+    pub fn normalized_email(&self) -> String {
+        normalize_email(&self.email)
+    }
+}
+
+impl ForgotPasswordForm {
+    pub fn validate(&self) -> Vec<String> {
+        let mut errors = Vec::new();
+        if !self.email.contains('@') {
+            errors.push("Bitte geben Sie eine gültige E-Mail-Adresse ein.".to_string());
+        }
+        errors
+    }
+
+    pub fn normalized_email(&self) -> String {
+        normalize_email(&self.email)
+    }
+}
+
+impl ResetPasswordForm {
+    pub fn validate(&self) -> Vec<String> {
+        let mut errors = Vec::new();
+        if self.token.trim().is_empty() {
+            errors.push("Der Zurücksetzungslink ist unvollständig oder fehlt.".to_string());
+        }
+        errors.extend(password_policy_errors(&self.password));
+        if self.password != self.password_confirm {
+            errors.push("Die beiden Passwörter stimmen nicht überein.".to_string());
+        }
+        errors
     }
 }
 

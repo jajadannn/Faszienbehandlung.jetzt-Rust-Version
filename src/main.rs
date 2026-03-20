@@ -16,21 +16,15 @@ async fn main() -> AppResult<()> {
     load_env();
     init_tracing();
 
+    let command = std::env::args().nth(1);
     let config = AppConfig::from_env()?;
-    let pool = db::init_pool(&config).await?;
     let email_service = EmailService::from_config(&config)?;
-    let location_service = LocationService::from_config(&config)?;
 
-    let state = AppState::new(config.clone(), pool, email_service, location_service);
-
-    match std::env::args().nth(1).as_deref() {
-        Some("seed-demo") => {
-            seed::seed_demo(&state).await?;
-            info!("Seed-Daten wurden erfolgreich eingespielt.");
-            return Ok(());
-        }
+    match command.as_deref() {
         Some("print-config") => {
             println!("BASE_URL={}", config.base_url);
+            println!("AUTO_RELOAD_ENABLED={}", config.auto_reload_enabled);
+            println!("AUTO_RELOAD_INTERVAL_MS={}", config.auto_reload_interval_ms);
             println!("PRACTICE_NAME={}", config.practice_name);
             println!("PRACTITIONER_NAME={}", config.practitioner_name);
             println!("PRACTICE_EMAIL={}", config.practice_email);
@@ -50,9 +44,44 @@ async fn main() -> AppResult<()> {
                 config.booking_package_session_price_cents
             );
             println!("HOUSE_CALL_FEE_CENTS={}", config.house_call_fee_cents);
+            println!(
+                "EMAIL_RESEND_COOLDOWN_SECONDS={}",
+                config.email_resend_cooldown_seconds
+            );
+            println!("SMTP_HOST={}", config.smtp_host.as_deref().unwrap_or(""));
+            println!("SMTP_PORT={}", config.smtp_port);
+            println!("SMTP_SECURITY={}", config.smtp_security.as_str());
+            println!("SMTP_FROM={}", config.smtp_from);
+            println!("SMTP_USERNAME_SET={}", config.smtp_username.is_some());
+            println!("SMTP_PASSWORD_SET={}", config.smtp_password.is_some());
+            return Ok(());
+        }
+        Some("smtp-test") => {
+            println!("SMTP_HOST={}", config.smtp_host.as_deref().unwrap_or(""));
+            println!("SMTP_PORT={}", config.smtp_port);
+            println!(
+                "SMTP_SECURITY={}",
+                config.smtp_security.resolved_for_port(config.smtp_port).as_str()
+            );
+            println!("SMTP_FROM={}", config.smtp_from);
+            match email_service.test_connection().await? {
+                Some(true) => println!("SMTP_CONNECTION=ok"),
+                Some(false) => println!("SMTP_CONNECTION=failed"),
+                None => println!("SMTP_CONNECTION=not_configured"),
+            }
             return Ok(());
         }
         _ => {}
+    }
+
+    let pool = db::init_pool(&config).await?;
+    let location_service = LocationService::from_config(&config)?;
+    let state = AppState::new(config.clone(), pool, email_service, location_service);
+
+    if matches!(command.as_deref(), Some("seed-demo")) {
+        seed::seed_demo(&state).await?;
+        info!("Seed-Daten wurden erfolgreich eingespielt.");
+        return Ok(());
     }
 
     let app = handlers::router(state.clone());

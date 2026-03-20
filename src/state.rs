@@ -11,6 +11,7 @@ use crate::{
 #[derive(Clone, FromRef)]
 pub struct AppState {
     pub config: Arc<AppConfig>,
+    pub server_instance_id: Arc<String>,
     pub pool: SqlitePool,
     pub email_service: Arc<EmailService>,
     pub location_service: Arc<LocationService>,
@@ -25,9 +26,18 @@ impl AppState {
     ) -> Self {
         Self {
             config: Arc::new(config),
+            server_instance_id: Arc::new(server_instance_id()),
             pool,
             email_service: Arc::new(email_service),
             location_service: Arc::new(location_service),
         }
     }
+}
+
+fn server_instance_id() -> String {
+    let now = std::time::SystemTime::now()
+        .duration_since(std::time::UNIX_EPOCH)
+        .unwrap_or_default();
+
+    format!("{}", now.as_millis())
 }

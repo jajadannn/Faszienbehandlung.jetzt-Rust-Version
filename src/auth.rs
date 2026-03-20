@@ -5,13 +5,14 @@ use argon2::{
 };
 use axum_extra::extract::cookie::{Cookie, CookieJar, SameSite};
 use base64::{Engine as _, engine::general_purpose::URL_SAFE_NO_PAD};
+use chrono::{Duration, NaiveDateTime};
 use rand::{RngCore, rngs::OsRng};
 use sha2::{Digest, Sha256};
 use sqlx::Row;
 
 use crate::{
     error::{AppError, AppResult},
-    models::AuthenticatedUser,
+    models::{AuthenticatedUser, User},
     state::AppState,
     utils::{normalize_email, now_utc},
 };
@@ -103,7 +104,7 @@ pub async fn create_session(
     let token = generate_token();
     let token_hash = hash_token(&token);
     let now = now_utc();
-    let expires_at = now + chrono::Duration::hours(state.config.session_ttl_hours);
+    let expires_at = now + Duration::hours(state.config.session_ttl_hours);
 
     sqlx::query(
         r#"
@@ -234,33 +235,69 @@ pub async fn ensure_email_not_taken(state: &AppState, email: &str) -> AppResult<
     Ok(())
 }
 
+pub async fn find_user_by_email(state: &AppState, email: &str) -> AppResult<Option<User>> {
+    sqlx::query_as::<_, User>("SELECT * FROM users WHERE email = ?")
+        .bind(normalize_email(email))
+        .fetch_optional(&state.pool)
+        .await
+        .map_err(Into::into)
+}
+
 pub async fn create_email_verification(
     state: &AppState,
     user_id: i64,
     email: &str,
     purpose: &str,
 ) -> AppResult<String> {
-    let token = generate_token();
-    let token_hash = hash_token(&token);
-    let now = now_utc();
-    let expires_at = now + chrono::Duration::hours(24);
+    issue_email_token(
+        state,
+        user_id,
+        email,
+        purpose,
+        Duration::hours(24),
+        TokenKind::Verification,
+    )
+    .await
+}
 
-    sqlx::query(
+pub async fn create_password_reset_token(
+    state: &AppState,
+    user_id: i64,
+    email: &str,
+) -> AppResult<String> {
+    issue_email_token(
+        state,
+        user_id,
+        email,
+        "password_reset",
+        Duration::hours(2),
+        TokenKind::PasswordReset,
+    )
+    .await
+}
+
+pub async fn verification_resend_allowed(state: &AppState, user_id: i64) -> AppResult<bool> {
+    let last_created_at = sqlx::query_scalar::<_, NaiveDateTime>(
         r#"
-        INSERT INTO email_verifications (user_id, token_hash, email, purpose, expires_at, created_at)
-        VALUES (?, ?, ?, ?, ?, ?)
+        SELECT created_at
+        FROM email_verifications
+        WHERE user_id = ?
+          AND purpose != 'password_reset'
+        ORDER BY created_at DESC
+        LIMIT 1
         "#,
     )
     .bind(user_id)
-    .bind(token_hash)
-    .bind(normalize_email(email))
-    .bind(purpose)
-    .bind(expires_at)
-    .bind(now)
-    .execute(&state.pool)
+    .fetch_optional(&state.pool)
     .await?;
 
-    Ok(token)
+    let Some(last_created_at) = last_created_at else {
+        return Ok(true);
+    };
+
+    let next_allowed_at =
+        last_created_at + Duration::seconds(state.config.email_resend_cooldown_seconds);
+    Ok(now_utc() >= next_allowed_at)
 }
 
 pub async fn verify_email_token(state: &AppState, token: &str) -> AppResult<Option<i64>> {
@@ -271,6 +308,7 @@ pub async fn verify_email_token(state: &AppState, token: &str) -> AppResult<Opti
         SELECT id, user_id
         FROM email_verifications
         WHERE token_hash = ?
+          AND purpose != 'password_reset'
           AND consumed_at IS NULL
           AND expires_at > ?
         "#,
@@ -295,11 +333,13 @@ pub async fn verify_email_token(state: &AppState, token: &str) -> AppResult<Opti
         .execute(&mut *tx)
         .await?;
 
-    sqlx::query("UPDATE email_verifications SET consumed_at = ? WHERE id = ?")
-        .bind(now)
-        .bind(verification_id)
-        .execute(&mut *tx)
-        .await?;
+    sqlx::query(
+        "UPDATE email_verifications SET consumed_at = ? WHERE user_id = ? AND purpose != 'password_reset' AND consumed_at IS NULL",
+    )
+    .bind(now)
+    .bind(user_id)
+    .execute(&mut *tx)
+    .await?;
 
     sqlx::query(
         "UPDATE appointments SET status = 'angefragt', updated_at = ? WHERE customer_id = (SELECT id FROM customers WHERE user_id = ?) AND status = 'wartet_auf_email'",
@@ -311,5 +351,152 @@ pub async fn verify_email_token(state: &AppState, token: &str) -> AppResult<Opti
 
     tx.commit().await?;
 
+    tracing::debug!(
+        verification_id,
+        user_id,
+        "E-Mail-Adresse erfolgreich bestätigt"
+    );
+
     Ok(Some(user_id))
+}
+
+pub async fn password_reset_token_is_valid(state: &AppState, token: &str) -> AppResult<bool> {
+    let token_hash = hash_token(token);
+    let now = now_utc();
+
+    let exists = sqlx::query_scalar::<_, i64>(
+        r#"
+        SELECT COUNT(*)
+        FROM email_verifications
+        WHERE token_hash = ?
+          AND purpose = 'password_reset'
+          AND consumed_at IS NULL
+          AND expires_at > ?
+        "#,
+    )
+    .bind(token_hash)
+    .bind(now)
+    .fetch_one(&state.pool)
+    .await?;
+
+    Ok(exists > 0)
+}
+
+pub async fn reset_password_with_token(
+    state: &AppState,
+    token: &str,
+    password_hash: &str,
+) -> AppResult<Option<i64>> {
+    let token_hash = hash_token(token);
+    let now = now_utc();
+    let row = sqlx::query(
+        r#"
+        SELECT id, user_id
+        FROM email_verifications
+        WHERE token_hash = ?
+          AND purpose = 'password_reset'
+          AND consumed_at IS NULL
+          AND expires_at > ?
+        "#,
+    )
+    .bind(token_hash)
+    .bind(now)
+    .fetch_optional(&state.pool)
+    .await?;
+
+    let Some(row) = row else {
+        return Ok(None);
+    };
+
+    let token_id: i64 = row.get("id");
+    let user_id: i64 = row.get("user_id");
+    let mut tx = state.pool.begin().await?;
+
+    sqlx::query("UPDATE users SET password_hash = ?, updated_at = ? WHERE id = ?")
+        .bind(password_hash)
+        .bind(now)
+        .bind(user_id)
+        .execute(&mut *tx)
+        .await?;
+
+    sqlx::query(
+        "UPDATE email_verifications SET consumed_at = ? WHERE user_id = ? AND purpose = 'password_reset' AND consumed_at IS NULL",
+    )
+    .bind(now)
+    .bind(user_id)
+    .execute(&mut *tx)
+    .await?;
+
+    sqlx::query("UPDATE sessions SET revoked_at = ? WHERE user_id = ? AND revoked_at IS NULL")
+        .bind(now)
+        .bind(user_id)
+        .execute(&mut *tx)
+        .await?;
+
+    tx.commit().await?;
+
+    tracing::debug!(token_id, user_id, "Passwort erfolgreich zurückgesetzt");
+
+    Ok(Some(user_id))
+}
+
+enum TokenKind {
+    Verification,
+    PasswordReset,
+}
+
+async fn issue_email_token(
+    state: &AppState,
+    user_id: i64,
+    email: &str,
+    purpose: &str,
+    ttl: Duration,
+    token_kind: TokenKind,
+) -> AppResult<String> {
+    let token = generate_token();
+    let token_hash = hash_token(&token);
+    let now = now_utc();
+    let expires_at = now + ttl;
+
+    let mut tx = state.pool.begin().await?;
+
+    match token_kind {
+        TokenKind::Verification => {
+            sqlx::query(
+                "UPDATE email_verifications SET consumed_at = ? WHERE user_id = ? AND purpose != 'password_reset' AND consumed_at IS NULL",
+            )
+            .bind(now)
+            .bind(user_id)
+            .execute(&mut *tx)
+            .await?;
+        }
+        TokenKind::PasswordReset => {
+            sqlx::query(
+                "UPDATE email_verifications SET consumed_at = ? WHERE user_id = ? AND purpose = 'password_reset' AND consumed_at IS NULL",
+            )
+            .bind(now)
+            .bind(user_id)
+            .execute(&mut *tx)
+            .await?;
+        }
+    }
+
+    sqlx::query(
+        r#"
+        INSERT INTO email_verifications (user_id, token_hash, email, purpose, expires_at, created_at)
+        VALUES (?, ?, ?, ?, ?, ?)
+        "#,
+    )
+    .bind(user_id)
+    .bind(token_hash)
+    .bind(normalize_email(email))
+    .bind(purpose)
+    .bind(expires_at)
+    .bind(now)
+    .execute(&mut *tx)
+    .await?;
+
+    tx.commit().await?;
+
+    Ok(token)
 }
