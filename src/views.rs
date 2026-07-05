@@ -23,6 +23,7 @@ pub struct PracticeView {
     pub package_session_price_input: String,
     pub package_card_label: String,
     pub package_validity_label: String,
+    pub package_validity_short: String,
     pub package_savings_label: String,
     pub house_call_fee_label: String,
     pub house_call_fee_input: String,
@@ -64,19 +65,6 @@ pub struct FlashMessage {
     pub kind: String,
     pub title: String,
     pub text: String,
-}
-
-#[derive(Clone)]
-pub struct StatCard {
-    pub value: String,
-    pub label: String,
-}
-
-#[derive(Clone)]
-pub struct InfoCard {
-    pub title: String,
-    pub text: String,
-    pub accent: String,
 }
 
 #[derive(Clone)]

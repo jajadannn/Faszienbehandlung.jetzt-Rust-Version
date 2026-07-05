@@ -11,7 +11,16 @@
   <meta property="og:description" content="{{ shell.meta.og_description }}">
   <meta property="og:url" content="{{ shell.meta.og_url }}">
   <meta property="og:image" content="{{ shell.meta.og_image }}">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:site_name" content="faszienbehandlung.jetzt">
+  <meta property="og:locale" content="de_DE">
+  <meta name="twitter:card" content="{{ shell.meta.twitter_card }}">
+  <meta name="twitter:title" content="{{ shell.meta.og_title }}">
+  <meta name="twitter:description" content="{{ shell.meta.og_description }}">
+  <meta name="twitter:image" content="{{ shell.meta.og_image }}">
   <meta name="theme-color" content="#70AECD">
+  {% block structured_data %}{% endblock %}
   <meta name="app-auto-reload" content="{% if shell.auto_reload_enabled %}true{% else %}false{% endif %}">
   <meta name="app-auto-reload-endpoint" content="{{ shell.auto_reload_endpoint }}">
   <meta name="app-auto-reload-interval-ms" content="{{ shell.auto_reload_interval_ms }}">
@@ -100,7 +109,7 @@
         </section>
       </div>
       <div class="container footer-bottom">
-        <p>&copy; {{ shell.year }} {{ shell.practice.name }}. Die Rechtstexte auf dieser Demo-Basis müssen vor dem Livegang fachlich geprüft werden.</p>
+        <p>&copy; {{ shell.year }} {{ shell.practice.name }}. Alle Angaben ohne Gewähr.</p>
         <div class="footer-links">
           <a href="/impressum">Impressum</a>
           <a href="/datenschutz">Datenschutz</a>

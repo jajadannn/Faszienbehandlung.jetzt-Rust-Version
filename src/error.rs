@@ -63,8 +63,7 @@ impl IntoResponse for AppError {
                 "Bitte melden Sie sich an, um diesen Bereich zu öffnen.".to_string()
             }
             Self::Forbidden => {
-                "Dieser Bereich ist ausschließlich für berechtigte Personen verfügbar."
-                    .to_string()
+                "Dieser Bereich ist ausschließlich für berechtigte Personen verfügbar.".to_string()
             }
             _ => {
                 "Beim Verarbeiten der Anfrage ist ein unerwarteter Fehler aufgetreten.".to_string()
@@ -93,11 +92,12 @@ impl IntoResponse for AppError {
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{{ status_code }} | {{ title }}</title>
+  <link rel="stylesheet" href="/static/css/site.css">
   <style>
-    :root{color-scheme:light;font-family:"Source Sans 3","Segoe UI",sans-serif;}
+    :root{color-scheme:light;font-family:"DM Sans","Segoe UI",sans-serif;}
     body{margin:0;min-height:100vh;display:grid;place-items:center;background:#f7fbfd;color:#173245;}
     main{max-width:42rem;padding:2.5rem;background:white;border-radius:24px;box-shadow:0 24px 60px rgba(17,47,68,.12)}
-    h1{margin-top:0;color:#4d93b8}
+    h1{margin-top:0;font-family:"Cormorant Garamond",Georgia,serif;color:#4d93b8}
     a{color:#964279}
   </style>
 </head>

@@ -398,6 +398,7 @@ h3 {
 .hero h1,
 .page-hero h1 {
   color: var(--white);
+  font-size: clamp(2.1rem, 4vw, 3.2rem);
 }
 
 .hero h1 {
@@ -780,7 +781,9 @@ section {
   border-radius: 999px;
   background: rgba(112, 174, 205, 0.12);
   color: var(--sky-dark);
-  font-size: 0.9rem;
+  font-family: "Cormorant Garamond", Georgia, serif;
+  letter-spacing: -0.01em;
+  font-size: 1.25rem;
   font-weight: 700;
   line-height: 1;
 }
@@ -1371,7 +1374,6 @@ textarea:focus {
 
 @media (max-width: 1080px) {
   .card-grid-three,
-  .price-grid,
   .split,
   .showcase-grid,
   .form-shell,
@@ -3310,6 +3312,13 @@ h2.section-title em {
   }
 }
 
+@media (max-width: 960px) {
+  .home-reference .about-split {
+    grid-template-columns: 220px 1fr;
+    gap: 2rem;
+  }
+}
+
 @media (max-width: 768px) {
   .home-reference .hero {
     min-height: calc(100svh - 59px);
@@ -3490,6 +3499,11 @@ h2.section-title em {
 
 @media (max-width: 440px) {
   .home-reference .pain-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .fact-row,
+  .home-reference .fact-row {
     grid-template-columns: 1fr;
   }
 }

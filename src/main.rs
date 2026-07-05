@@ -32,7 +32,10 @@ async fn main() -> AppResult<()> {
             println!("PRACTICE_ADDRESS_LINE_1={}", config.practice_address_line_1);
             println!("PRACTICE_ADDRESS_LINE_2={}", config.practice_address_line_2);
             println!("PRACTICE_REGION_LABEL={}", config.practice_region_label);
-            println!("PRACTICE_HOUSE_CALL_AREA={}", config.practice_house_call_area);
+            println!(
+                "PRACTICE_HOUSE_CALL_AREA={}",
+                config.practice_house_call_area
+            );
             println!("OPENING_HOURS_WEEKDAYS={}", config.opening_hours_weekdays);
             println!("OPENING_HOURS_SATURDAY={}", config.opening_hours_saturday);
             println!(
@@ -61,7 +64,10 @@ async fn main() -> AppResult<()> {
             println!("SMTP_PORT={}", config.smtp_port);
             println!(
                 "SMTP_SECURITY={}",
-                config.smtp_security.resolved_for_port(config.smtp_port).as_str()
+                config
+                    .smtp_security
+                    .resolved_for_port(config.smtp_port)
+                    .as_str()
             );
             println!("SMTP_FROM={}", config.smtp_from);
             match email_service.test_connection().await? {

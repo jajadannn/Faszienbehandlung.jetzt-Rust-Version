@@ -7,6 +7,8 @@ use sqlx::{
 
 use crate::{config::AppConfig, error::AppResult};
 
+pub static MIGRATOR: sqlx::migrate::Migrator = sqlx::migrate!("./migrations");
+
 pub async fn init_pool(config: &AppConfig) -> AppResult<SqlitePool> {
     ensure_sqlite_parent_dir(&config.database_url)?;
 
@@ -21,18 +23,17 @@ pub async fn init_pool(config: &AppConfig) -> AppResult<SqlitePool> {
         .connect_with(options)
         .await?;
 
-    sqlx::migrate!("./migrations").run(&pool).await?;
+    MIGRATOR.run(&pool).await?;
 
     Ok(pool)
 }
 
 fn ensure_sqlite_parent_dir(database_url: &str) -> AppResult<()> {
-    if let Some(path) = database_url.strip_prefix("sqlite://") {
-        if let Some(parent) = Path::new(path).parent() {
-            if !parent.as_os_str().is_empty() {
-                fs::create_dir_all(parent)?;
-            }
-        }
+    if let Some(path) = database_url.strip_prefix("sqlite://")
+        && let Some(parent) = Path::new(path).parent()
+        && !parent.as_os_str().is_empty()
+    {
+        fs::create_dir_all(parent)?;
     }
 
     Ok(())

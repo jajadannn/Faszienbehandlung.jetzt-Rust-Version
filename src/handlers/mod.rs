@@ -3,11 +3,11 @@ pub mod admin;
 pub mod auth;
 pub mod booking;
 pub mod pages;
+pub mod seo_routes;
 
 use askama::Template;
 use axum::{
-    Router,
-    Json,
+    Json, Router,
     extract::State,
     http::StatusCode,
     middleware,
@@ -79,6 +79,8 @@ pub fn router(state: AppState) -> Router {
         .route("/impressum", get(pages::imprint))
         .route("/datenschutz", get(pages::privacy))
         .route("/verify-email", get(auth::verify_email))
+        .route("/robots.txt", get(seo_routes::robots_txt))
+        .route("/sitemap.xml", get(seo_routes::sitemap_xml))
         .route("/__dev/reload", get(dev_reload_state))
         .nest_service("/static", ServeDir::new("static"))
         .fallback(not_found)
@@ -135,17 +137,28 @@ pub async fn build_shell(
                 config.opening_hours_weekdays, config.opening_hours_saturday
             ),
             appointment_duration_short: format!("{} Min.", config.appointment_duration_minutes),
-            appointment_duration_verbose: format!("ca. {} Minuten", config.appointment_duration_minutes),
+            appointment_duration_verbose: format!(
+                "ca. {} Minuten",
+                config.appointment_duration_minutes
+            ),
             single_session_price_label: euro_symbol_label(config.booking_base_price_cents),
             single_session_price_input: plain_euro_value(config.booking_base_price_cents),
-            package_session_price_label: euro_symbol_label(config.booking_package_session_price_cents),
-            package_session_price_input: plain_euro_value(config.booking_package_session_price_cents),
+            package_session_price_label: euro_symbol_label(
+                config.booking_package_session_price_cents,
+            ),
+            package_session_price_input: plain_euro_value(
+                config.booking_package_session_price_cents,
+            ),
             package_card_label: format!(
                 "{}er-Karte · pro Sitzung",
                 config.booking_package_session_count
             ),
             package_validity_label: format!(
                 "Übertragbar · {} Monate gültig",
+                config.booking_package_validity_months
+            ),
+            package_validity_short: format!(
+                "{} Monate Gültigkeit",
                 config.booking_package_validity_months
             ),
             package_savings_label,

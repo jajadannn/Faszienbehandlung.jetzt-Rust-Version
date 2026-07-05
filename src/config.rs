@@ -134,14 +134,14 @@ impl AppConfig {
             env::var("PRACTICE_ADDRESS_LINE_1").unwrap_or_else(|_| "Musterstraße 12".to_string());
         let practice_address_line_2 =
             env::var("PRACTICE_ADDRESS_LINE_2").unwrap_or_else(|_| "10115 Berlin".to_string());
-        let practice_region_label = env::var("PRACTICE_REGION_LABEL")
-            .unwrap_or_else(|_| practice_address_line_2.clone());
-        let practice_house_call_area = env::var("PRACTICE_HOUSE_CALL_AREA")
-            .unwrap_or_else(|_| practice_region_label.clone());
+        let practice_region_label =
+            env::var("PRACTICE_REGION_LABEL").unwrap_or_else(|_| practice_address_line_2.clone());
+        let practice_house_call_area =
+            env::var("PRACTICE_HOUSE_CALL_AREA").unwrap_or_else(|_| practice_region_label.clone());
         let opening_hours_weekdays = env::var("OPENING_HOURS_WEEKDAYS")
             .unwrap_or_else(|_| "Mo-Fr 16:00-22:00 Uhr".to_string());
-        let opening_hours_saturday = env::var("OPENING_HOURS_SATURDAY")
-            .unwrap_or_else(|_| "Sa 09:00-19:00 Uhr".to_string());
+        let opening_hours_saturday =
+            env::var("OPENING_HOURS_SATURDAY").unwrap_or_else(|_| "Sa 09:00-19:00 Uhr".to_string());
         let appointment_duration_minutes: i64 = env::var("APPOINTMENT_DURATION_MINUTES")
             .unwrap_or_else(|_| "90".to_string())
             .parse()
@@ -152,9 +152,9 @@ impl AppConfig {
             .context("BOOKING_BASE_PRICE_CENTS muss eine Zahl sein")?;
         let booking_package_session_price_cents: i64 =
             env::var("BOOKING_PACKAGE_SESSION_PRICE_CENTS")
-            .unwrap_or_else(|_| booking_base_price_cents.to_string())
-            .parse()
-            .context("BOOKING_PACKAGE_SESSION_PRICE_CENTS muss eine Zahl sein")?;
+                .unwrap_or_else(|_| booking_base_price_cents.to_string())
+                .parse()
+                .context("BOOKING_PACKAGE_SESSION_PRICE_CENTS muss eine Zahl sein")?;
         let booking_package_session_count: i64 = env::var("BOOKING_PACKAGE_SESSION_COUNT")
             .unwrap_or_else(|_| "10".to_string())
             .parse()

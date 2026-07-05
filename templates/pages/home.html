@@ -1,5 +1,7 @@
 {% extends "layouts/base.html" %}
 
+{% block structured_data %}<script type="application/ld+json">{{ structured_data|safe }}</script>{% endblock %}
+
 {% block content %}
 <div class="home-reference">
   <section class="hero" id="home">
@@ -18,7 +20,7 @@
     <div class="hero-inner">
       <div class="hero-badge">&#10022; Gantke&reg; zertifizierter Faszienbehandler &middot; {{ shell.practice.region_label }}</div>
       <h1>Endlich wieder<br><em>schmerzfrei</em> bewegen.</h1>
-      <p class="hero-sub">Chronische R&uuml;ckenschmerzen, Verspannungen, Migr&auml;ne &ndash; die Gantke&reg; Faszienbehandlung l&ouml;st die Ursache, nicht nur die Symptome. Sp&uuml;rbar ab der ersten Sitzung.</p>
+      <p class="hero-sub">Chronische R&uuml;ckenschmerzen, Verspannungen, Migr&auml;ne &ndash; die Gantke&reg; Faszienbehandlung setzt an den Faszien als m&ouml;glicher Ursache an. Viele Klienten berichten schon nach der ersten Sitzung von sp&uuml;rbarer Erleichterung.</p>
       <div class="hero-cta-group">
         <a class="btn-primary" href="/terminbuchung">&#128197; Jetzt Termin buchen</a>
         <a class="btn-secondary" href="#ueber">Mehr erfahren &#8595;</a>
@@ -35,7 +37,7 @@
         <strong>Kurzantwort</strong>
         <p>Die Gantke&reg; Faszienbehandlung ist unterst&uuml;tzend bei chronischen Schmerzen, Verspannungen und eingeschr&auml;nkter Beweglichkeit &ndash; f&uuml;r alle Altersgruppen, vollst&auml;ndig schmerzfrei. {{ shell.practice.appointment_duration_verbose }}, {{ shell.practice.single_session_price_label }}, Praxis in {{ shell.practice.address_line_2 }}.</p>
       </div>
-      <p class="section-lead">Die Faszienbehandlung wirkt ganzheitlich &ndash; vom Fu&szlig; bis zum Kopf. Diese Beschwerden sprechen besonders gut auf die Gantke&reg; Methode an:</p>
+      <p class="section-lead">Die Faszienbehandlung betrachtet den K&ouml;rper ganzheitlich &ndash; vom Fu&szlig; bis zum Kopf. Mit diesen Beschwerden kommen Klienten besonders h&auml;ufig in die Praxis:</p>
       <div class="pain-grid">
         <div class="pain-card"><div class="pain-emoji">&#128281;</div><h3>R&uuml;ckenschmerzen</h3><p>Chronische Schmerzen im Lenden- oder Brustwirbels&auml;ulenbereich</p></div>
         <div class="pain-card"><div class="pain-emoji">&#129301;</div><h3>Migr&auml;ne &amp; Kopfschmerzen</h3><p>Wiederkehrende Kopfschmerzen und Spannungskopfschmerzen</p></div>
@@ -100,8 +102,8 @@
       <p class="section-lead">Faszien sind das Bindegewebsnetz, das deinen gesamten K&ouml;rper durchzieht. Wenn sie verkleben oder verh&auml;rten, entstehen Schmerzen und Bewegungseinschr&auml;nkungen &ndash; oft weit entfernt vom eigentlichen Problem.</p>
       <div class="benefit-list">
         <div class="benefit-item"><div class="benefit-dot"></div><div><h3>Sanft &amp; tief wirkend</h3><p>Pr&auml;zise manuelle Grifftechniken l&ouml;sen Verklebungen vollst&auml;ndig schmerzfrei und ohne Hilfsmittel.</p></div></div>
-        <div class="benefit-item"><div class="benefit-dot"></div><div><h3>Ganzheitlicher Ansatz</h3><p>Faszien bilden ein k&ouml;rperweites Netzwerk. Die Behandlung wirkt systemisch &ndash; strukturelle Fehlspannungen werden an der Ursache korrigiert, nicht nur lokal.</p></div></div>
-        <div class="benefit-item"><div class="benefit-dot"></div><div><h3>Nachhaltiger als klassische Massage</h3><p>Klassische Massage behandelt prim&auml;r die Muskulatur. Gantke&reg; zielt auf das fasziale Bindegewebsnetz &ndash; die Wirkung ist langfristiger und ganzheitlicher.</p></div></div>
+        <div class="benefit-item"><div class="benefit-dot"></div><div><h3>Ganzheitlicher Ansatz</h3><p>Faszien bilden ein k&ouml;rperweites Netzwerk. Die Behandlung betrachtet den K&ouml;rper als Ganzes &ndash; Spannungsmuster werden nicht nur lokal, sondern im Zusammenhang behandelt.</p></div></div>
+        <div class="benefit-item"><div class="benefit-dot"></div><div><h3>Anders als klassische Massage</h3><p>Klassische Massage behandelt prim&auml;r die Muskulatur. Gantke&reg; zielt auf das fasziale Bindegewebsnetz &ndash; viele empfinden die Wirkung als nachhaltiger.</p></div></div>
         <div class="benefit-item"><div class="benefit-dot"></div><div><h3>F&uuml;r alle Altersgruppen</h3><p>Die sanfte Technik passt sich deinem individuellen Gewebe an &ndash; egal ob jung, alt, sportlich oder wenig bewegt.</p></div></div>
       </div>
     </div>
@@ -126,13 +128,14 @@
 
   <section class="section-white" id="bewertungen">
     <div class="container">
-      <div class="section-tag">Kundenstimmen</div>
-      <h2 class="section-title">Das sagen<br><em>meine Klienten</em></h2>
+      <div class="section-tag">Erfahrungsberichte</div>
+      <h2 class="section-title">Beispielhafte<br><em>R&uuml;ckmeldungen</em></h2>
       <div class="testi-grid">
-        <div class="testi-card"><div class="stars-row">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p>Nach nur drei Behandlungen sind meine chronischen Nackenschmerzen, die mich jahrelang gequ&auml;lt haben, fast vollst&auml;ndig verschwunden. Einfach unglaublich!</p><div class="testi-author">&ndash; Sandra M., aus der Region</div></div>
-        <div class="testi-card"><div class="stars-row">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p>{{ shell.practice.practitioner_name }} nimmt sich wirklich Zeit und erkl&auml;rt genau, was gemacht wird. Ich f&uuml;hle mich nach jeder Sitzung wie neu &ndash; entspannt und so viel beweglicher.</p><div class="testi-author">&ndash; Klaus W., aus dem Umland</div></div>
-        <div class="testi-card"><div class="stars-row">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p>Meine Knieschmerzen haben sich nach der Behandlungsserie deutlich gebessert. Ich kann wieder Sport machen &ndash; sehr empfehlenswert!</p><div class="testi-author">&ndash; Maria K., aus dem Praxisumfeld</div></div>
+        <div class="testi-card"><p>Nach einigen Behandlungen sind meine chronischen Nackenschmerzen, die mich jahrelang begleitet haben, deutlich besser geworden.</p><div class="testi-author">&ndash; Sandra M., aus der Region</div></div>
+        <div class="testi-card"><p>{{ shell.practice.practitioner_name }} nimmt sich wirklich Zeit und erkl&auml;rt genau, was gemacht wird. Ich f&uuml;hle mich nach jeder Sitzung entspannt und beweglicher.</p><div class="testi-author">&ndash; Klaus W., aus dem Umland</div></div>
+        <div class="testi-card"><p>Meine Knieschmerzen haben sich nach der Behandlungsserie sp&uuml;rbar gebessert. Ich kann wieder Sport machen &ndash; sehr empfehlenswert!</p><div class="testi-author">&ndash; Maria K., aus dem Praxisumfeld</div></div>
       </div>
+      <p class="price-note-text">Hinweis: Beispielhafte, anonymisierte R&uuml;ckmeldungen zur Veranschaulichung &ndash; individuelle Ergebnisse k&ouml;nnen abweichen.</p>
     </div>
   </section>
 
@@ -161,7 +164,7 @@
           <ul class="price-perks">
             <li>{{ shell.practice.package_savings_label }}</li>
             <li>Flexibel &uuml;bertragbar</li>
-            <li>1 Jahr G&uuml;ltigkeit</li>
+            <li>{{ shell.practice.package_validity_short }}</li>
             <li>Rechnung f&uuml;r Versicherung</li>
           </ul>
         </div>
@@ -197,21 +200,21 @@
       <div class="section-tag">H&auml;ufige Fragen</div>
       <h2 class="section-title">Deine Fragen &ndash;<br><em>meine Antworten</em></h2>
       <div class="faq-list">
-        <details><summary>Was ist die Gantke&reg; Faszienbehandlung genau?</summary><div>Die Gantke&reg; Methode ist eine sanfte, manuelle Faszientherapie, entwickelt von Frank Gantke. Durch pr&auml;zise Grifftechniken werden Verklebungen und Fehlspannungen im Bindegewebe gel&ouml;st. Vollst&auml;ndig schmerzfrei, ca. 90 Minuten, ohne Ger&auml;te &ndash; ganzheitlich vom Fu&szlig; bis zum Kopf.</div></details>
-        <details><summary>F&uuml;r wen ist die Faszienbehandlung geeignet?</summary><div>F&uuml;r alle Altersgruppen. Besonders wirksam bei chronischen R&uuml;ckenschmerzen, Nackenverspannungen, Migr&auml;ne, Gelenkbeschwerden und nach Verletzungen.<br><br><strong>Nicht geeignet bei:</strong> akuten Entz&uuml;ndungen, Fieber, frischen Operationswunden oder Thrombosen.</div></details>
+        <details><summary>Was ist die Gantke&reg; Faszienbehandlung genau?</summary><div>Die Gantke&reg; Methode ist eine sanfte, manuelle Faszientherapie, entwickelt von Robert Gantke. Durch pr&auml;zise Grifftechniken werden Verklebungen und Fehlspannungen im Bindegewebe gel&ouml;st. Vollst&auml;ndig schmerzfrei, {{ shell.practice.appointment_duration_verbose }}, ohne Ger&auml;te &ndash; ganzheitlich vom Fu&szlig; bis zum Kopf.</div></details>
+        <details><summary>F&uuml;r wen ist die Faszienbehandlung geeignet?</summary><div>F&uuml;r alle Altersgruppen. H&auml;ufige Anliegen sind chronische R&uuml;ckenschmerzen, Nackenverspannungen, Migr&auml;ne, Gelenkbeschwerden und Beschwerden nach Verletzungen.<br><br><strong>Nicht geeignet bei:</strong> akuten Entz&uuml;ndungen, Fieber, frischen Operationswunden oder Thrombosen.</div></details>
         <details><summary>Ist die Behandlung schmerzhaft?</summary><div>In der Regel vollst&auml;ndig schmerzfrei. Du kannst ein angenehmes Ziehen oder Druckgef&uuml;hl sp&uuml;ren &ndash; viele empfinden die Sitzung als tief entspannend. Sollte etwas unangenehm sein, passe ich den Druck sofort an.</div></details>
         <details><summary>Was sollte ich vor der Behandlung beachten?</summary><div>Bitte trinke ausreichend Wasser (mind. 1,5 Liter am Behandlungstag) und komme in bequemer Kleidung &ndash; Leggings oder lockere Hose mit T-Shirt. Schwere Mahlzeiten direkt vorher vermeiden.</div></details>
         <details><summary>Wie viele Termine sind n&ouml;tig?</summary><div>Sehr individuell. Viele sp&uuml;ren nach der ersten Sitzung bereits Verbesserung. Bei chronischen Beschwerden empfehle ich 3&ndash;6 Behandlungen im Abstand von 1&ndash;3 Wochen.</div></details>
         <details><summary>&Uuml;bernimmt die Krankenkasse die Kosten?</summary><div>Gesetzliche Krankenkassen &uuml;bernehmen die Kosten in der Regel nicht. Private Zusatzversicherungen erstatten h&auml;ufig einen Teil. Eine Rechnung stelle ich gerne aus.</div></details>
         <details><summary>Wo findet die Behandlung statt &ndash; und wie komme ich hin?</summary><div><strong>Praxis:</strong> {{ shell.practice.address_line_1 }}, {{ shell.practice.address_line_2 }}. Kostenlose Parkpl&auml;tze direkt vor dem Haus und gute Erreichbarkeit in der Region {{ shell.practice.region_label }}.<br><br>Hausbesuche in {{ shell.practice.house_call_area }} nach Absprache &ndash; Fahrtpauschale + {{ shell.practice.house_call_fee_label }}.</div></details>
-        <details><summary>Was ist der Unterschied zur klassischen Massage?</summary><div>Klassische Massage behandelt prim&auml;r die Muskulatur. Die Gantke&reg; Methode zielt gezielt auf das fasziale Bindegewebsnetz und korrigiert strukturelle Fehlspannungen im gesamten K&ouml;rper &ndash; nicht nur lokal. Die Wirkung ist oft nachhaltiger und langfristiger.</div></details>
+        <details><summary>Was ist der Unterschied zur klassischen Massage?</summary><div>Klassische Massage behandelt prim&auml;r die Muskulatur. Die Gantke&reg; Methode zielt gezielt auf das fasziale Bindegewebsnetz und behandelt Spannungsmuster im gesamten K&ouml;rper &ndash; nicht nur lokal. Viele empfinden die Wirkung als nachhaltiger.</div></details>
       </div>
     </div>
   </section>
 
   <section class="cta-section" id="buchen">
     <div class="cta-inner container">
-      <h2>Bereit, endlich<br><em>schmerzfrei</em> zu leben?</h2>
+      <h2>Bereit, wieder <em>freier</em><br>in Bewegung zu kommen?</h2>
       <p>Buche jetzt deinen Termin &ndash; schnell, einfach und unverbindlich online. Die ersten freien Termine werden oft schnell belegt.</p>
       <a class="btn-cta-large" href="/terminbuchung">&#128197; Jetzt Termin buchen</a>
       <p class="cta-micro">Kostenlose Erstberatung inklusive &middot; Keine Vorauszahlung</p>

@@ -45,7 +45,7 @@
       </article>
       <article class="content-card card--plum">
         <h3>Persönlich und lokal</h3>
-        <p>Die Praxisdaten, Öffnungszeiten und Preise kommen direkt aus der Konfiguration und lassen sich damit sauber an den realen Standort {{ shell.practice.region_label }} anpassen.</p>
+        <p>Praxisdaten, Öffnungszeiten und Preise auf dieser Webseite entsprechen dem aktuellen Stand der Praxis in {{ shell.practice.region_label }}.</p>
       </article>
     </div>
   </section>
@@ -113,50 +113,65 @@
   <section class="page-hero">
     <div class="container narrow">
       <p class="eyebrow">Impressum</p>
-      <h1>Platzhalter für die verbindlichen Anbieterangaben.</h1>
-      <p class="lead">Dieses Impressum ist ein strukturiertes Grundgerüst. Vor dem echten Livegang müssen alle Angaben rechtlich und fachlich geprüft sowie vollständig ersetzt werden.</p>
+      <h1>Anbieterangaben nach &sect; 5 DDG.</h1>
+      <p class="lead">Mit [BITTE ERGÄNZEN] markierte Angaben müssen vor dem Livegang vervollständigt und rechtlich geprüft werden.</p>
     </div>
   </section>
   <section class="section section-white">
     <div class="container narrow prose legal-box">
-      <h2>Anbieter</h2>
-      <p>{{ shell.practice.name }}<br>Inhaber/in: [Bitte ergänzen]<br>{{ shell.practice.address_line_1 }}<br>{{ shell.practice.address_line_2 }}</p>
+      <div class="quick-answer">
+        <strong>Hinweis</strong>
+        <p>Mit [BITTE ERGÄNZEN] markierte Angaben müssen vor dem Livegang vervollständigt und rechtlich geprüft werden.</p>
+      </div>
+      <h2>Angaben gemäß &sect; 5 DDG</h2>
+      <p>{{ shell.practice.name }}<br>Inhaber: [BITTE ERGÄNZEN: vollständiger Name]<br>{{ shell.practice.address_line_1 }}<br>{{ shell.practice.address_line_2 }}<br>Deutschland</p>
       <h2>Kontakt</h2>
       <p>Telefon: {{ shell.practice.phone }}<br>E-Mail: {{ shell.practice.email }}</p>
-      <h2>Berufsrechtliche Angaben</h2>
-      <p>[Bitte je nach tatsächlicher Berufsbezeichnung, Kammerzugehörigkeit, Aufsichtsbehörde und einschlägigen Vorschriften ergänzen.]</p>
-      <h2>Wichtiger Hinweis</h2>
-      <p>Dieses Dokument ist nur ein Platzhalter. Es ersetzt keine rechtliche Beratung und muss vor Livegang individuell geprüft werden.</p>
+      <h2>Berufsbezeichnung</h2>
+      <p>[BITTE ERGÄNZEN: z.&nbsp;B. „Gantke&reg; zertifizierter Faszienbehandler (Zertifikat verliehen durch …)“. Falls Heilpraktiker: Berufsbezeichnung, verleihender Staat, zuständige Aufsichtsbehörde und berufsrechtliche Regelungen angeben.]</p>
+      <h2>Umsatzsteuer</h2>
+      <p>[BITTE ERGÄNZEN: Umsatzsteuer-Identifikationsnummer gemäß &sect; 27a UStG oder Hinweis auf Kleinunternehmerregelung nach &sect; 19 UStG.]</p>
+      <h2>Verantwortlich für den Inhalt nach &sect; 18 Abs. 2 MStV</h2>
+      <p>[BITTE ERGÄNZEN: Name]<br>{{ shell.practice.address_line_1 }}<br>{{ shell.practice.address_line_2 }}</p>
+      <h2>Verbraucherstreitbeilegung / Universalschlichtungsstelle</h2>
+      <p>Wir sind nicht bereit oder verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen. [BITTE PRÜFEN]</p>
+      <h2>Haftung für Inhalte</h2>
+      <p>Die Inhalte dieser Seiten wurden mit größter Sorgfalt erstellt. Für die Richtigkeit, Vollständigkeit und Aktualität der Inhalte kann jedoch keine Gewähr übernommen werden. Als Diensteanbieter sind wir für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich, jedoch nicht verpflichtet, übermittelte oder gespeicherte fremde Informationen zu überwachen. Verpflichtungen zur Entfernung oder Sperrung der Nutzung von Informationen nach den allgemeinen Gesetzen bleiben hiervon unberührt.</p>
+      <h2>Haftung für Links</h2>
+      <p>Diese Seite enthält Links zu externen Webseiten Dritter, auf deren Inhalte wir keinen Einfluss haben. Für die Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter oder Betreiber der Seiten verantwortlich. Die verlinkten Seiten wurden zum Zeitpunkt der Verlinkung auf mögliche Rechtsverstöße überprüft; rechtswidrige Inhalte waren zu diesem Zeitpunkt nicht erkennbar.</p>
     </div>
   </section>
 {% else if path_key == "privacy" %}
   <section class="page-hero">
     <div class="container narrow">
       <p class="eyebrow">Datenschutz</p>
-      <h1>DSGVO-Grundgerüst mit klar markierten Platzhaltern.</h1>
-      <p class="lead">Die Datenschutzerklärung bildet die benötigten Verarbeitungen strukturiert ab, muss vor Livegang aber zwingend rechtlich fachgeprüft und an Hosting, Mailversand und reale Organisationsabläufe angepasst werden.</p>
+      <h1>Datenschutzerklärung.</h1>
+      <p class="lead">Diese Erklärung beschreibt, welche personenbezogenen Daten auf dieser Webseite verarbeitet werden. Mit [BITTE ERGÄNZEN] markierte Angaben müssen vor dem Livegang vervollständigt und rechtlich geprüft werden.</p>
     </div>
   </section>
   <section class="section section-white">
     <div class="container narrow prose legal-box">
-      <h2>1. Verantwortliche Stelle</h2>
-      <p>{{ shell.practice.name }}<br>{{ shell.practice.address_line_1 }}<br>{{ shell.practice.address_line_2 }}<br>{{ shell.practice.email }}<br>{{ shell.practice.phone }}<br><br>[Inhaber/in und verbindliche Verantwortlichkeit rechtlich ergänzen.]</p>
-      <h2>2. Hosting und Server-Logs</h2>
-      <p>Platzhalter für Hosting-Anbieter, Serverstandort, Auftragsverarbeitung, Speicherdauer und technische Logdaten.</p>
-      <h2>3. Kontaktformular und Kommunikation</h2>
-      <p>Platzhalter für Rechtsgrundlage, Zweck, Speicherfrist und organisatorische Bearbeitung eingehender Kontaktanfragen.</p>
-      <h2>4. Terminbuchung</h2>
-      <p>Erfasst werden nur die für die Terminorganisation erforderlichen Daten, insbesondere Name, E-Mail-Adresse, Telefonnummer, Wohnort, Wunschtermin und optionale Nachricht.</p>
-      <h2>5. Registrierung und Login</h2>
-      <p>Platzhalter für Kundenkonto, Passwort-Hashing, Login-Sessions, Rollenmodell und Zugriffsbeschränkung.</p>
-      <h2>6. E-Mail-Verifizierung</h2>
-      <p>Platzhalter für Double-Opt-in-nahe Verifizierung, Token-Speicherung, Gültigkeitsdauer und Zweck der Bestätigungs-E-Mails.</p>
-      <h2>7. Cookies / Sessions</h2>
-      <p>Platzhalter für technisch notwendige Session- und CSRF-Cookies ohne Marketing-Zweck.</p>
-      <h2>8. Zahlungsstatus und Kundendatenverarbeitung</h2>
-      <p>Platzhalter für Verarbeitung von Termin- und Zahlungsdaten im Kundenkonto und im Admin-Bereich der Praxis.</p>
-      <h2>9. Rechtlicher Hinweis</h2>
-      <p>Diese Datenschutzerklärung ist ein technisches Grundgerüst und muss vor dem Livegang zwingend rechtlich fachlich geprüft werden.</p>
+      <h2>1. Verantwortlicher</h2>
+      <p>Verantwortlich für die Datenverarbeitung auf dieser Webseite ist:</p>
+      <p>{{ shell.practice.name }}<br>[BITTE ERGÄNZEN: verantwortliche Person]<br>{{ shell.practice.address_line_1 }}<br>{{ shell.practice.address_line_2 }}<br>Telefon: {{ shell.practice.phone }}<br>E-Mail: {{ shell.practice.email }}</p>
+      <h2>2. Hosting und Server-Logfiles</h2>
+      <p>Beim Aufruf dieser Webseite verarbeitet der Server automatisch technische Zugriffsdaten (insbesondere IP-Adresse, Zeitpunkt des Zugriffs und aufgerufene Seite) in Logfiles. Diese Daten sind für den sicheren und stabilen Betrieb der Webseite erforderlich. Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse am sicheren Betrieb). [BITTE ERGÄNZEN: Hosting-Anbieter bzw. Serverstandort sowie Speicherdauer der Logfiles.]</p>
+      <h2>3. Technisch notwendige Cookies (Session und CSRF)</h2>
+      <p>Diese Webseite verwendet ausschließlich technisch notwendige Cookies: ein Session-Cookie für den angemeldeten Kundenbereich sowie ein Cookie zum Schutz vor Cross-Site-Request-Forgery (CSRF). Es kommen keine Tracking-, Analyse- oder Marketing-Cookies zum Einsatz. Rechtsgrundlage ist &sect; 25 Abs. 2 Nr. 2 TDDDG in Verbindung mit Art. 6 Abs. 1 lit. f DSGVO. Die Session endet nach Ablauf der konfigurierten Gültigkeitsdauer oder durch Abmelden. [BITTE PRÜFEN: konkrete Session-Gültigkeitsdauer angeben.]</p>
+      <h2>4. Registrierung und Kundenkonto</h2>
+      <p>Für die Online-Terminbuchung wird ein Kundenkonto angelegt. Dabei werden Name, E-Mail-Adresse, Telefonnummer und Wohnort verarbeitet. Das Passwort wird ausschließlich als kryptografischer Hash (Argon2) gespeichert und ist für uns nicht einsehbar. Die E-Mail-Adresse wird über einen Bestätigungslink verifiziert (Double-Opt-in). Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO (Vertragsanbahnung und -durchführung).</p>
+      <h2>5. Online-Terminbuchung</h2>
+      <p>Bei einer Terminbuchung werden der Wunschtermin, eine optionale Nachricht sowie gegebenenfalls die Adresse für einen Hausbesuch verarbeitet. Die Daten dienen ausschließlich der Terminorganisation und der Dokumentation des Zahlungsstatus; eine Zahlungsabwicklung über die Webseite findet nicht statt. Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO.</p>
+      <h2>6. E-Mail-Versand</h2>
+      <p>Transaktions-E-Mails (E-Mail-Verifizierung, Passwort-Zurücksetzen, terminbezogene Nachrichten) werden über einen SMTP-Dienstleister versendet. Dabei wird Ihre E-Mail-Adresse an diesen Dienstleister übermittelt. [BITTE ERGÄNZEN: eingesetzter E-Mail-/SMTP-Provider und gegebenenfalls Vertrag zur Auftragsverarbeitung.]</p>
+      <h2>7. Ortsvalidierung über OpenStreetMap Nominatim</h2>
+      <p>Bei Angabe eines Wohnorts bzw. einer Hausbesuchsadresse wird der eingegebene Ortsname serverseitig zur Plausibilitätsprüfung an den Dienst Nominatim der OpenStreetMap Foundation (nominatim.openstreetmap.org) übermittelt. Dabei wird ausschließlich der eingegebene Ortsname an die Server der OpenStreetMap Foundation gesendet &ndash; nicht Ihre IP-Adresse oder weitere personenbezogene Daten. Die Ergebnisse werden zeitlich begrenzt zwischengespeichert. Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an der Vermeidung fehlerhafter Buchungen).</p>
+      <h2>8. Keine Analyse- und Marketingdienste</h2>
+      <p>Diese Webseite setzt keine Analysedienste (z.&nbsp;B. Google Analytics), keine Social-Media-Plugins und keine externen Schriftarten-Dienste ein. Alle Schriftarten werden lokal vom eigenen Server ausgeliefert.</p>
+      <h2>9. Ihre Rechte</h2>
+      <p>Sie haben gegenüber uns das Recht auf Auskunft (Art. 15 DSGVO), Berichtigung (Art. 16 DSGVO), Löschung (Art. 17 DSGVO), Einschränkung der Verarbeitung (Art. 18 DSGVO), Datenübertragbarkeit (Art. 20 DSGVO) und Widerspruch gegen die Verarbeitung (Art. 21 DSGVO). Außerdem haben Sie das Recht, sich bei einer Datenschutz-Aufsichtsbehörde zu beschweren (Art. 77 DSGVO). Wenden Sie sich hierfür jederzeit an die oben genannten Kontaktdaten.</p>
+      <h2>10. Speicherdauer und Löschung</h2>
+      <p>Personenbezogene Daten werden gelöscht, sobald sie für die genannten Zwecke nicht mehr erforderlich sind und keine gesetzlichen Aufbewahrungspflichten entgegenstehen. [BITTE ERGÄNZEN: konkrete Fristen für Konto-, Termin- und Zahlungsdaten.]</p>
     </div>
   </section>
 {% endif %}

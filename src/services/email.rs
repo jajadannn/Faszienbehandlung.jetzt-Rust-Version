@@ -37,10 +37,9 @@ impl EmailService {
             Some(host) => MailSender::Smtp(Self::build_smtp_transport(config, host)?),
             None => MailSender::LogOnly,
         };
-        let from = config
-            .smtp_from
-            .parse::<Mailbox>()
-            .map_err(|error| AppError::Anyhow(anyhow::anyhow!("SMTP_FROM ist ungültig: {error}")))?;
+        let from = config.smtp_from.parse::<Mailbox>().map_err(|error| {
+            AppError::Anyhow(anyhow::anyhow!("SMTP_FROM ist ungültig: {error}"))
+        })?;
 
         Ok(Self {
             sender,
@@ -60,10 +59,8 @@ impl EmailService {
         let mut builder = match security {
             SmtpSecurity::ImplicitTls => AsyncSmtpTransport::<Tokio1Executor>::relay(host)
                 .context("SMTP-Host konnte nicht für implicit TLS initialisiert werden")?,
-            SmtpSecurity::StartTls => {
-                AsyncSmtpTransport::<Tokio1Executor>::starttls_relay(host)
-                    .context("SMTP-Host konnte nicht für STARTTLS initialisiert werden")?
-            }
+            SmtpSecurity::StartTls => AsyncSmtpTransport::<Tokio1Executor>::starttls_relay(host)
+                .context("SMTP-Host konnte nicht für STARTTLS initialisiert werden")?,
             SmtpSecurity::Plain => AsyncSmtpTransport::<Tokio1Executor>::builder_dangerous(host),
             SmtpSecurity::Auto => unreachable!("AUTO wird vor dem Aufbau aufgelöst"),
         };
@@ -88,15 +85,17 @@ impl EmailService {
     pub async fn test_connection(&self) -> AppResult<Option<bool>> {
         match &self.sender {
             MailSender::LogOnly => Ok(None),
-            MailSender::Smtp(transport) => transport
-                .test_connection()
-                .await
-                .map(Some)
-                .map_err(|error| {
-                    AppError::Anyhow(anyhow::anyhow!(
-                        "SMTP-Verbindungstest fehlgeschlagen: {error}"
-                    ))
-                }),
+            MailSender::Smtp(transport) => {
+                transport
+                    .test_connection()
+                    .await
+                    .map(Some)
+                    .map_err(|error| {
+                        AppError::Anyhow(anyhow::anyhow!(
+                            "SMTP-Verbindungstest fehlgeschlagen: {error}"
+                        ))
+                    })
+            }
         }
     }
 

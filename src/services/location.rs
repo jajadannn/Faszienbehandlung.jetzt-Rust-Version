@@ -54,12 +54,11 @@ impl LocationService {
         .bind(now)
         .fetch_optional(pool)
         .await?
+            && row.is_valid
         {
-            if row.is_valid {
-                return Ok(LocationValidationResult {
-                    display_name: row.display_name,
-                });
-            }
+            return Ok(LocationValidationResult {
+                display_name: row.display_name,
+            });
         }
 
         let response = self

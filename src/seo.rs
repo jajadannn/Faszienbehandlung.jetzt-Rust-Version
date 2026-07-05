@@ -10,6 +10,7 @@ pub struct SeoMeta {
     pub og_url: String,
     pub og_image: String,
     pub og_type: String,
+    pub twitter_card: String,
 }
 
 impl SeoMeta {
@@ -27,8 +28,9 @@ impl SeoMeta {
             og_title: title.to_string(),
             og_description: description.to_string(),
             og_url: canonical_url,
-            og_image: format!("{}/static/og/og-image.svg", config.base_url),
+            og_image: format!("{}/static/og/og-image.png", config.base_url),
             og_type: "website".to_string(),
+            twitter_card: "summary_large_image".to_string(),
         }
     }
 }

@@ -172,14 +172,7 @@ pub async fn login(
     }
 
     if !errors.is_empty() {
-        return render_login_page(
-            &state,
-            jar,
-            form.clone(),
-            errors,
-            None,
-        )
-        .await;
+        return render_login_page(&state, jar, form.clone(), errors, None).await;
     }
 
     let user = user.expect("checked above");
@@ -212,14 +205,7 @@ pub async fn show_forgot_password(
     State(state): State<AppState>,
     jar: CookieJar,
 ) -> AppResult<Response> {
-    render_forgot_password_page(
-        &state,
-        jar,
-        ForgotPasswordForm::default(),
-        Vec::new(),
-        None,
-    )
-    .await
+    render_forgot_password_page(&state, jar, ForgotPasswordForm::default(), Vec::new(), None).await
 }
 
 pub async fn request_password_reset(
@@ -235,8 +221,7 @@ pub async fn request_password_reset(
     }
 
     if let Some(user) = auth_helpers::find_user_by_email(&state, &form.email).await? {
-        let token =
-            auth_helpers::create_password_reset_token(&state, user.id, &user.email).await?;
+        let token = auth_helpers::create_password_reset_token(&state, user.id, &user.email).await?;
         state
             .email_service
             .send_password_reset_email(&user.email, &user.full_name, &token)
@@ -382,13 +367,7 @@ pub async fn verify_email(
         None => false,
     };
 
-    render_verify_page(
-        &state,
-        jar,
-        success,
-        None,
-    )
-    .await
+    render_verify_page(&state, jar, success, None).await
 }
 
 async fn render_login_page(

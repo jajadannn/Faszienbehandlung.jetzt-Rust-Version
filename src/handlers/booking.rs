@@ -95,12 +95,12 @@ pub async fn submit_booking(
                 other => return Err(other),
             }
         }
-        if current_user.is_none() {
-            if let Err(error) = auth_helpers::ensure_email_not_taken(&state, &form.email).await {
-                match error {
-                    AppError::BadRequest(message) => errors.push(message),
-                    other => return Err(other),
-                }
+        if current_user.is_none()
+            && let Err(error) = auth_helpers::ensure_email_not_taken(&state, &form.email).await
+        {
+            match error {
+                AppError::BadRequest(message) => errors.push(message),
+                other => return Err(other),
             }
         }
     }
